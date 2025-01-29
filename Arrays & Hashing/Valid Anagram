@@ -4,16 +4,12 @@ class Solution {
         if(s.length() != t.length())
             return false;
 
-        int[] charS = new int[26];  //constant space
+        int[] chars = new int[26];  //constant space
 
         // O(n)
         for(char ch : s.toCharArray()){
-            charS[ch - 'a']++;
-        }
-
-        // O(n)
-        for(char ch : t.toCharArray()){
-            charS[ch - 'a']--;
+            chars[ch - 'a']++;
+            chars[ch - 'a']--;
         }
 
         for(int idx : charS){
