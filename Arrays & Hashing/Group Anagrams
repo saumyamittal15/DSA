@@ -1,0 +1,35 @@
+class Solution {
+    
+    public List<List<String>> groupAnagrams(String[] strs) {
+
+        if(strs.length == 0) 
+            return new ArrayList<>();
+
+        Map<String, List<String>> anagrams = new HashMap<>();
+        for(String str : strs){
+            //generate key for the string
+            String key = generateKey(str);
+
+            //check if map contains key (all anagrams will generate same key)
+            //if map does not contain key, create a new arraylist
+            // if contains key, add the string to the arraylist
+            if(!anagrams.containsKey(key)){
+                anagrams.put(key, new ArrayList<>());
+            }
+            anagrams.get(key).add(str);      
+        }
+
+        return new ArrayList<>(anagrams.values());
+
+    }
+
+    private String generateKey(String str){
+        int[] key = new int[26];
+        for(char ch : str.toCharArray()){
+            key[ch - 'a']++;
+        }
+        return Arrays.toString(key);
+    }
+
+    
+}
