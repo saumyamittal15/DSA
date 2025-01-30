@@ -1,0 +1,26 @@
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int[] arr = new int[26];
+
+        int left = 0;
+        //maximum frequency of any single character in the current window.
+        int maxFreqOfChar = 0;
+        int lengthOfLongestSubstring = 0;
+
+        for(int right = 0; right < s.length(); right++){
+            //updating character count in array 
+            arr[s.charAt(right) - 'A']++;
+            maxFreqOfChar = Math.max(maxFreqOfChar, arr[s.charAt(right) - 'A']);
+
+            //if number of characters that need to be changed exceeds k
+            if(right - left + 1 - maxFreqOfChar > k){
+                //decrement the character count
+                arr[s.charAt(left) - 'A']--;
+                //move the window
+                left++;
+            }
+            lengthOfLongestSubstring = Math.max(maxFreqOfChar, right - left + 1);
+        }
+        return lengthOfLongestSubstring;
+    }
+}

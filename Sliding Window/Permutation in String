@@ -1,0 +1,25 @@
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+
+        //for storing frequency of characters in string s1 and s2 respectively in two arrays
+        int[] arrS1 = new int[26];
+        int[] arrS2 = new int[26];
+
+        int n = s1.length();
+
+        for (int i = 0; i < n; i++){
+            arrS1[s1.charAt(i)-'a']++;
+        }
+
+        for(int i = 0 ; i < s2.length(); i++){
+            arrS2[s2.charAt(i)-'a']++;
+            if(i >= n){
+                //decrement count of character sliding out of the window
+                arrS2[s2.charAt(i - n)-'a']--;
+            }
+            if(Arrays.equals(arrS1,arrS2)) return true;
+        }
+
+        return false;
+    }
+}

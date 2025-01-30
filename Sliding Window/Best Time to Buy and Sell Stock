@@ -1,0 +1,23 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+
+        if(prices.length == 0) return 0;
+
+        int buyIdx = 0;
+        int sellIdx = 1;
+
+        int maxProfit = 0;
+
+        while(sellIdx < prices.length){
+            if(prices[buyIdx] < prices[sellIdx]){
+                int profit = prices[sellIdx] - prices[buyIdx];
+                maxProfit = Math.max(maxProfit, profit);
+            }
+            else{
+                buyIdx = sellIdx;
+            }
+            sellIdx++;
+        }
+        return maxProfit;
+    }
+}

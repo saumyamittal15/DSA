@@ -1,0 +1,26 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        List<Character> longestSubstring = new ArrayList<>();
+            int largestlength = 0;
+            for(int right = 0; right < s.length(); right++) {
+
+                //if window already contains the character
+                //we need to handle the duplicates
+                if(longestSubstring.contains(s.charAt(right))) { 
+                    //finding the index of the duplicate character
+                    int index = longestSubstring.indexOf(s.charAt(right));
+
+                    //remove the character from the window
+                    longestSubstring.remove(index);
+
+                    //clear all the elements uptill the duplicate character to start a new window
+                    if(index > 0)
+                        longestSubstring.subList(0, index).clear();
+                }
+                //add current character at index
+                longestSubstring.add(s.charAt(right));
+                largestlength = Math.max(largestlength, longestSubstring.size());
+            }
+            return largestlength;
+    }
+}
