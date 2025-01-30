@@ -1,0 +1,31 @@
+class Solution {
+    public int trap(int[] height) {
+
+        if(height.length == 0) return 0;
+
+        // two pointers
+        int left = 0;
+        int right = height.length - 1;
+
+        // storing max lengths on either side
+        int leftMax = height[left];
+        int rightMax = height[right];
+
+        int trappedWater = 0;
+
+        while(left < right){
+            if(leftMax < rightMax){
+                left++;
+                leftMax = Math.max(leftMax, height[left]);
+                trappedWater += leftMax - height[left];
+            }
+            else{
+                right--;
+                rightMax = Math.max(rightMax, height[right]);
+                trappedWater += rightMax - height[right];
+            }
+        }
+        return trappedWater;
+
+    }
+}

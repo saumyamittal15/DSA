@@ -1,0 +1,46 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> triplets = new ArrayList<List<Integer>>();
+
+        //sort the array   
+        Arrays.sort(nums);
+
+        for(int i = 0 ; i < nums.length ; i++){
+            //check for duplicates and ignore
+            if(i > 0 && nums[i] == nums[i-1])
+                continue;
+            searchTriplet(nums, i+1, -nums[i], triplets);
+        }
+        return triplets;
+    }
+
+    private List<List<Integer>> searchTriplet(int[] sortedArr, int start, int targetSum, List<List<Integer>> triplets){
+
+        int end = sortedArr.length-1;
+        while(start < end){
+
+            // target sum is -ve of first element, ie, if X + Y + Z = 0, 
+            // then Y + Z (currentSum) = -X (targetSum)
+            int currentSum = sortedArr[start] + sortedArr[end];
+
+            if(currentSum == targetSum){
+                triplets.add(Arrays.asList(-targetSum, sortedArr[start], sortedArr[end]));
+                start++;
+                end--;
+                //ignoring duplicate elements
+                while(start < end && sortedArr[start] == sortedArr[start - 1]){
+                    start++;
+                }
+                while(start < end && sortedArr[end] == sortedArr[end + 1]){
+                    end--;
+                }
+            }
+            else if(currentSum > targetSum){
+                end--;
+            }
+            else 
+                start++;
+        }
+        return triplets;
+    }
+}
