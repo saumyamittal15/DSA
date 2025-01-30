@@ -1,39 +1,33 @@
-class Solution {
+public class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        
-        
-        /**
-        //Brute Force - Complexity quite high, inefficient for large arrays
-        int left = 0;
-        
-        int counter = 0;
-        int[] maxSlidingWindow = new int[nums.length - k + 1];
-
-        while(counter < maxSlidingWindow.length){
-            int maxSoFar = nums[left];
-            int right = left + k - 1;
-            for(int i = left; i <= right ; i++){
-                maxSoFar = Math.max(nums[i],maxSoFar);
-            }
-            maxSlidingWindow[counter++] = maxSoFar;
-            left++;
-        }
-        return maxSlidingWindow;
-        **/
-
+        // Result array to store the maximums for each sliding window
         int[] ans = new int[nums.length - k + 1];
         int j = 0;
+
+        // Deque to store indices of elements, which will be in decreasing order of their corresponding values
         Deque<Integer> q = new LinkedList<>();
+
+        // Iterate over each element in the input array 'nums'
         for (int i = 0; i < nums.length; i++) {
+            
+            // Remove elements from the front of the deque if they are outside the current window
             if (!q.isEmpty() && q.peekFirst() < i - k + 1) 
-                q.pollFirst();
+                q.pollFirst();  // Remove the index at the front if it is out of the window range
+
+            // Remove elements from the back of the deque while the current element is larger
+            // than the element at the back of the deque (to maintain decreasing order)
             while (!q.isEmpty() && nums[i] > nums[q.peekLast()]) 
                 q.pollLast();
+
+            // Add the current element's index to the deque
             q.offer(i);
+
+            // Once we've processed at least 'k' elements, record the maximum for the current window
             if (i >= k - 1) 
-                ans[j++] = nums[q.peekFirst()];
+                ans[j++] = nums[q.peekFirst()];  // The front of the deque is the largest element in the window
         }
+        
+        // Return the result array containing the maximums of all sliding windows
         return ans;
-       
     }
 }
