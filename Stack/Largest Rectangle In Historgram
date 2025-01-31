@@ -1,0 +1,74 @@
+import java.util.Stack;
+import javafx.util.Pair;
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        // Variable to store the maximum area found
+        int area = 0;
+        
+        // The length of the heights array
+        int n = heights.length;
+
+        // Variable to track the "start" index of the rectangle when a smaller height is found
+        int start;
+
+        // Stack to store pairs of (index, height) for each bar
+        Stack<Pair<Integer, Integer>> stack = new Stack<>();
+
+        // Iterate through all the heights
+        for (int i = 0; i < heights.length; i++) {
+            // Get the current height
+            int curHt = heights[i];
+
+            // Initialize the "start" index for this bar
+            start = i;
+
+            // If the current bar is shorter than the bar on top of the stack, process the stack
+            while (!stack.isEmpty() && stack.peek().getValue() > curHt) {
+                // Pop the top of the stack, which represents a rectangle with height greater than curHt
+                Pair<Integer, Integer> pair = stack.pop();
+
+                // The index of the popped bar
+                int index = pair.getKey();
+
+                // The height of the popped bar
+                int h = pair.getValue();
+
+                // Calculate the area using the popped bar's height and the width between the current index and the popped index
+                area = Math.max(area, h * (i - index));
+
+                // Update the start of the rectangle to the leftmost bar of the popped one
+                start = index;
+            }
+
+            // Push the current bar (index and height) to the stack
+            stack.push(new Pair(start, curHt));
+        }
+
+        // Process any remaining bars in the stack
+        while (!stack.isEmpty()) {
+            // Pop the top of the stack
+            Pair<Integer, Integer> pair = stack.pop();
+            int index = pair.getKey();
+            int h = pair.getValue();
+
+            // Calculate the area using the remaining bars
+            area = Math.max(area, h * (n - index)); // The width extends to the end of the array
+        }
+
+        // Return the maximum area found
+        return area;
+    }
+}
+
+/*
+ * Time Complexity:
+ * - The main loop runs once through all elements in the heights array. For each element,
+ *   we may push and pop from the stack. Both the push and pop operations are O(1), but
+ *   each element can be pushed and popped only once. So the total time complexity is O(n),
+ *   where n is the length of the input array `heights`.
+ * 
+ * Space Complexity:
+ * - The stack stores pairs of indices and heights. In the worst case, each element could be
+ *   pushed to the stack once, so the space complexity is O(n), where n is the length of the input array `heights`.
+ */

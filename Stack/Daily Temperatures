@@ -1,0 +1,17 @@
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int answer[] = new int[temperatures.length];
+
+        //holds the indexes of the temperatures in monotonically decreasing way
+        Stack<Integer> stack = new Stack<>();
+
+        for(int currentDay = 0; currentDay < temperatures.length ; currentDay++){
+            while(!stack.isEmpty() && temperatures[currentDay] > temperatures[stack.peek()]){
+                int prevDay = stack.pop();
+                answer[prevDay] = currentDay - prevDay;
+            }
+            stack.add(currentDay);
+        }
+        return answer;
+    }
+}
