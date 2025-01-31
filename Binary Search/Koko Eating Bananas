@@ -1,0 +1,46 @@
+import java.util.Arrays;
+
+public class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        // Initialize the lower bound of the binary search to 1 (minimum speed)
+        int l = 1;
+        // Initialize the upper bound of the binary search to the maximum value in the piles array
+        int r = Arrays.stream(piles).max().getAsInt();
+        // Variable to store the result (minimum eating speed)
+        int res = r;
+
+        // Perform binary search to find the minimum eating speed
+        while (l <= r) {
+            // Calculate the middle point of the current range
+            int k = (l + r) / 2;
+
+            // Calculate the total time required to eat all bananas at speed k
+            long totalTime = 0;
+            for (int p : piles) {
+                // Use Math.ceil to calculate hours needed for each pile
+                totalTime += Math.ceil((double) p / k);
+            }
+
+            // If totalTime is less than or equal to h, update result and narrow search range
+            if (totalTime <= h) {
+                res = k;  // Update result with current speed
+                r = k - 1; // Narrow the search range to smaller speeds
+            } else {
+                l = k + 1; // Narrow the search range to larger speeds
+            }
+        }
+        return res; // Return the minimum eating speed found
+    }
+}
+
+/*
+Space Complexity:
+- O(1): The algorithm uses a constant amount of extra space regardless of the input size. 
+         The only variables used are integers for bounds and counters.
+
+Time Complexity:
+- O(n * log(maxPile)): 
+    - `log(maxPile)` comes from the binary search over possible eating speeds, where maxPile is the largest pile size.
+    - For each binary search iteration, we iterate through all `n` piles to calculate `totalTime`.
+    - Therefore, the overall complexity is O(n * log(maxPile)).
+*/

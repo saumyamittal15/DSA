@@ -1,0 +1,39 @@
+class Solution {
+    public int search(int[] nums, int target) {
+        // Initialize the left and right pointers
+        int left = 0;
+        int right = nums.length - 1; 
+        
+        // Binary search loop: continue as long as the left pointer is less than or equal to the right pointer
+        while (left <= right) {
+            // Calculate the middle index to avoid overflow
+            int mid = left + (right - left) / 2;
+            
+            // Check if the target is found at the middle index
+            if (target == nums[mid])
+                return mid; // Return the index of the target
+            
+            // If the target is smaller than the middle element, search in the left half
+            else if (target < nums[mid])
+                right = mid - 1;
+            
+            // If the target is larger than the middle element, search in the right half
+            else if (target > nums[mid])
+                left = mid + 1;
+        }
+        
+        // If we exit the loop, it means the target is not present in the array
+        return -1;     
+    }
+}
+
+/*
+Space Complexity:
+- The space complexity of this algorithm is O(1), as it uses only a constant amount of extra space 
+  for variables like `left`, `right`, and `mid`.
+
+Time Complexity:
+- The time complexity of this algorithm is O(log n), where `n` is the size of the input array.
+- This is because with each iteration of the while loop, we reduce the search space by half.
+- In the worst case, it takes log2(n) iterations to find the target or conclude that it does not exist.
+*/

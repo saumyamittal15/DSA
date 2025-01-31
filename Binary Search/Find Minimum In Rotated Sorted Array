@@ -1,0 +1,38 @@
+class Solution {
+    public int findMin(int[] nums) {
+        // Initialize pointers for the binary search
+        int l = 0; // Left pointer
+        int r = nums.length - 1; // Right pointer
+
+        // Perform binary search to find the minimum element
+        while (l <= r) {
+            // If the subarray is already sorted, return the leftmost element as it is the smallest
+            if (nums[l] <= nums[r])
+                return nums[l];
+
+            // Calculate the middle index
+            int mid = l + (r - l) / 2;
+
+            // If the middle element is greater than or equal to the leftmost element,
+            // it means the minimum lies in the right half of the array
+            if (nums[mid] >= nums[l])
+                l = mid + 1; // Search in the right half of the array
+            else
+                // Otherwise, the minimum lies in the left half, including mid
+                r = mid; // Search in the left half of the array
+        }
+
+        // Return statement to satisfy compiler; this line will never be reached due to input constraints
+        return 0;
+    }
+}
+
+/*
+Time Complexity:
+- The algorithm performs a binary search, which divides the search space in half during each iteration.
+- Therefore, the time complexity is O(log n), where n is the size of the input array.
+
+Space Complexity:
+- The algorithm uses a constant amount of extra space for variables (l, r, mid).
+- Therefore, the space complexity is O(1).
+*/
