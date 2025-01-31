@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        // Initialize a variable `previous` to null. This will eventually become the new head of the reversed list.
+        ListNode previous = null;
+
+        // Start with the head of the original list.
+        ListNode current = head;
+
+        // Traverse through the list until `current` becomes null (end of the list).
+        while (current != null) {
+            // Temporarily store the next node in a variable `temp`.
+            ListNode temp = current.next;
+
+            // Reverse the current node's pointer to point to the previous node.
+            current.next = previous;
+
+            // Move the `previous` pointer one step forward to the current node.
+            previous = current;
+
+            // Move the `current` pointer one step forward to the next node (stored in `temp`).
+            current = temp;
+        }
+
+        // At the end of the loop, `previous` will point to the new head of the reversed list.
+        return previous;
+    }
+}
+
+/*
+ * Time Complexity: O(n)
+ * - The algorithm traverses each node of the linked list exactly once, where n is the number of nodes in the list.
+ * - Therefore, the time complexity is O(n).
+ *
+ * Space Complexity: O(1)
+ * - The algorithm uses a constant amount of extra space (three pointers: `previous`, `current`, and `temp`).
+ * - No additional data structures are used, so the space complexity is O(1).
+ */

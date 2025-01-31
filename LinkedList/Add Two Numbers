@@ -1,0 +1,64 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        
+        // Create a dummy node to simplify the logic for adding nodes to the result list
+        ListNode head = new ListNode(0);
+        // Pointer to traverse the result list
+        ListNode current = head;
+        // Variable to store the carry from the sum of two digits
+        int carry = 0;
+
+        // Loop through both linked lists until both are fully traversed
+        while (l1 != null || l2 != null) {
+
+            // Get the value of the current node of l1, or 0 if l1 is null
+            int x = (l1 != null) ? l1.val : 0;
+            // Get the value of the current node of l2, or 0 if l2 is null
+            int y = (l2 != null) ? l2.val : 0;
+
+            // Calculate the sum of the two digits and the carry
+            int sum = x + y + carry;
+            // Update carry for the next iteration (sum divided by 10)
+            carry = sum / 10;
+            // Create a new node with the digit value (sum modulo 10) and add it to the result list
+            current.next = new ListNode(sum % 10);
+            // Move to the next node in the result list
+            current = current.next;
+
+            // Move to the next nodes in l1 and l2 if they exist
+            if (l1 != null)
+                l1 = l1.next;
+            if (l2 != null)
+                l2 = l2.next;
+        }
+
+        // If there is any remaining carry after processing all nodes, add it as a new node
+        if (carry > 0) {
+            current.next = new ListNode(carry);
+        }
+
+        // Return the result list starting from the first meaningful node (skipping dummy node)
+        return head.next;
+    }
+}
+
+/**
+ * Time Complexity:
+ * The time complexity of this solution is O(max(m, n)), where m is the length of l1 and n is the length of l2.
+ * This is because we traverse both linked lists once, stopping when both are fully processed.
+
+ * Space Complexity:
+ * The space complexity is O(max(m, n)), where m is the length of l1 and n is the length of l2.
+ * This accounts for the space required to store the result linked list. 
+ * No additional space is used other than a few variables (carry, pointers), so it is linear in terms of output size.
+ */

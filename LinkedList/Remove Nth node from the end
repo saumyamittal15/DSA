@@ -1,0 +1,56 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        // If the linked list is empty or has only one node, return null since we are removing the only node.
+        if (head == null || head.next == null) return null;
+
+        // Create a dummy node to simplify edge cases (e.g., removing the first node).
+        // This dummy node points to the head of the linked list.
+        ListNode temp = new ListNode(0);
+        temp.next = head;
+
+        // Initialize two pointers: 'first' and 'second', both starting at the dummy node.
+        ListNode first = temp, second = temp;
+
+        // Move the 'second' pointer 'n' steps ahead to maintain a gap of 'n' nodes between 'first' and 'second'.
+        while (n > 0) {
+            second = second.next;
+            n--;
+        }
+
+        // Move both pointers one step at a time until 'second' reaches the end of the list.
+        // At this point, 'first' will be pointing to the node just before the target node to be removed.
+        while (second.next != null) {
+            second = second.next;
+            first = first.next;
+        }
+
+        // Skip the nth node from the end by updating the 'next' pointer of the 'first' pointer.
+        first.next = first.next.next;
+
+        // Return the new head of the linked list (skipping over the dummy node).
+        return temp.next;
+    }
+}
+
+/**
+ * Time Complexity:
+ * - The algorithm makes two passes through the linked list:
+ *   1. The first pass moves the 'second' pointer 'n' steps ahead. This takes O(n).
+ *   2. The second pass moves both pointers until 'second' reaches the end of the list. This takes O(L - n),
+ *      where L is the total length of the linked list.
+ * - Overall, this results in O(L), where L is the length of the linked list.
+
+ * Space Complexity:
+ * - The algorithm uses O(1) additional space since it only uses a constant amount of extra variables
+ *   (dummy node, two pointers: 'first' and 'second').
+ */

@@ -1,0 +1,62 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public void reorderList(ListNode head) {
+        // Step 1: Find the middle point of the linked list using two pointers (slow and fast).
+        // The `slow` pointer will point to the middle of the list when the loop ends.
+        ListNode slow = head;
+        ListNode fast = head.next; // Fast pointer starts ahead of slow.
+        while (fast != null && fast.next != null) {
+            slow = slow.next;       // Move slow by one step.
+            fast = fast.next.next; // Move fast by two steps.
+        }
+
+        // Step 2: Reverse the second half of the list starting from `slow.next`.
+        // Disconnect the first half from the second half by setting `slow.next` to null.
+        ListNode second = slow.next;  
+        ListNode prev = slow.next = null; // Set `slow.next` to null to separate the two halves.
+
+        while (second != null) {
+            ListNode temp = second.next; // Temporarily store the next node.
+            second.next = prev;          // Reverse the current node's pointer.
+            prev = second;               // Move `prev` to the current node.
+            second = temp;               // Move to the next node in the original list.
+        }
+
+        // Step 3: Merge the two halves of the list in alternating order.
+        // `first` points to the head of the first half, and `second` points to the head of the reversed second half.
+        ListNode first = head;
+        second = prev; // `prev` now points to the head of the reversed second half.
+
+        while (second != null) {
+            ListNode temp1 = first.next;  // Temporarily store the next node in the first half.
+            ListNode temp2 = second.next; // Temporarily store the next node in the second half.
+
+            first.next = second;          // Link the current node of the first half to a node from the second half.
+            second.next = temp1;          // Link the current node of the second half to a node from the first half.
+
+            first = temp1;                // Move to the next node in the first half.
+            second = temp2;               // Move to the next node in the reversed second half.
+        }
+    }
+}
+
+/**
+ * Time Complexity:
+ * - Finding the middle of the list takes O(n) time, where n is the number of nodes in the list.
+ * - Reversing the second half of the list also takes O(n/2), which simplifies to O(n).
+ * - Merging both halves takes O(n) time as well.
+ * - Overall, time complexity is O(n).
+
+ * Space Complexity:
+ * - The algorithm uses constant extra space for pointers (`slow`, `fast`, `prev`, etc.).
+ * - No additional data structures are used, so space complexity is O(1).
+ */

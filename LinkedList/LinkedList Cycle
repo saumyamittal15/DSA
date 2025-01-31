@@ -1,0 +1,53 @@
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    /**
+     * This method detects if a cycle exists in a given singly linked list.
+     * It uses the Floyd's Cycle Detection Algorithm (also known as the 
+     * Tortoise and Hare Algorithm) to determine if there is a cycle.
+     *
+     * @param head The head node of the singly linked list.
+     * @return true if the linked list contains a cycle, false otherwise.
+     */
+    public boolean hasCycle(ListNode head) {
+        // Initialize two pointers: slow and fast, both starting at the head of the list.
+        ListNode slow = head;
+        ListNode fast = head;
+
+        // Traverse the linked list. The fast pointer moves two steps at a time,
+        // while the slow pointer moves one step at a time.
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next; // Move fast pointer two steps ahead.
+            slow = slow.next;      // Move slow pointer one step ahead.
+
+            // If at any point, the slow pointer meets the fast pointer, 
+            // it means there is a cycle in the linked list.
+            if (slow == fast)
+                return true;
+        }
+
+        // If we reach here, it means no cycle was detected in the linked list.
+        return false;
+    }
+}
+
+/**
+ * Time Complexity:
+ * - The time complexity is O(n), where n is the number of nodes in the linked list.
+ *   In the worst case, both pointers traverse the entire list once. The fast pointer
+ *   may loop around within the cycle, but this still results in linear time complexity
+ *   due to its constant progress relative to the slow pointer.
+
+ * Space Complexity:
+ * - The space complexity is O(1), as no additional data structures are used. 
+ *   Only two pointers (slow and fast) are maintained throughout the algorithm.
+ */
