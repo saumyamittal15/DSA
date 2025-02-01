@@ -1,0 +1,62 @@
+/**
+ * Solution to check if a binary tree contains a subtree identical to given subRoot
+ * Time Complexity: O(m * n) where m is nodes in root tree and n is nodes in subRoot tree
+ * Space Complexity: O(h) where h is height of the tree due to recursion stack
+ */
+class Solution {
+    /**
+     * Main method to check if subRoot is a subtree of root
+     * @param root Main tree to search in
+     * @param subRoot Subtree to search for
+     * @return true if subRoot is a subtree of root, false otherwise
+     */
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        return subtree(root, subRoot);  
+    }
+
+    /**
+     * Helper method to traverse the main tree and find potential matching nodes
+     * @param root Current node in main tree
+     * @param subroot Root of the subtree to match
+     * @return true if subtree is found, false otherwise
+     */
+    public boolean subtree(TreeNode root, TreeNode subroot) {
+        // Base case: if we reach null in main tree, subtree can't exist
+        if(root == null) return false;
+
+        // If current node value matches subroot value, check for identical structure
+        if(root.val == subroot.val) {
+            if(isIdentical(root, subroot))
+                return true;
+        }
+        // Recursively check left and right subtrees
+        return subtree(root.left, subroot) || subtree(root.right, subroot);
+    }
+
+    /**
+     * Helper method to check if two trees are identical in structure and values
+     * @param root Current node in main tree
+     * @param subroot Current node in subtree
+     * @return true if trees are identical, false otherwise
+     */
+    public boolean isIdentical(TreeNode root, TreeNode subroot) {
+        // If both nodes are null, trees are identical up to this point
+        if(root == null && subroot == null) {
+            return true;
+        } 
+        // If one is null or values don't match, trees are not identical
+        else if(root == null || subroot == null || root.val != subroot.val) {
+            return false;
+        }
+
+        // Recursively check left and right subtrees
+        if(!isIdentical(root.left, subroot.left)) {
+            return false;
+        }
+        if(!isIdentical(root.right, subroot.right)) {
+            return false;
+        }
+
+        return true;
+    }
+}
