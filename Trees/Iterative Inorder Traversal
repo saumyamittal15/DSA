@@ -1,0 +1,38 @@
+class Solution {
+    /**
+     * Performs an in-order traversal (left -> root -> right) of a binary tree iteratively.
+     * 
+     * Time Complexity: O(n) where n is the number of nodes in the tree
+     * - Each node is visited exactly once
+     * - Each node is pushed and popped from the stack once
+     * 
+     * Space Complexity: O(h) where h is the height of the tree
+     * - In worst case (skewed tree), h = n, so space would be O(n)
+     * - In balanced tree, h = log n, so space would be O(log n)
+     *
+     * @param root The root node of the binary tree
+     * @return List containing nodes in in-order traversal
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> inorder = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        
+        TreeNode node = root;
+        
+        // Continue traversal while either node is not null or stack is not empty
+        while (node != null || !stack.isEmpty()) {
+            // Keep going left and push nodes to stack
+            if (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+            // When we can't go left anymore, process current node and go right
+            else {
+                node = stack.pop();
+                inorder.add(node.val);
+                node = node.right;
+            }
+        }
+        return inorder;
+    }
+}

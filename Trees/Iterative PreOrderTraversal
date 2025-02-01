@@ -1,0 +1,49 @@
+class Solution {
+    /**
+     * Performs a pre-order traversal (root -> left -> right) of a binary tree iteratively.
+     * 
+     * Time Complexity: O(n) where n is the number of nodes in the tree
+     * - Each node is visited exactly once
+     * 
+     * Space Complexity: O(h) where h is the height of the tree
+     * - In worst case (skewed tree), the stack can contain all nodes
+     * - In balanced tree, space will be O(log n)
+     *
+     * @param root The root node of the binary tree
+     * @return List containing nodes in pre-order traversal
+     */
+    public List<Integer> preOrderTraversal(TreeNode root) {
+        // Initialize result list to store pre-order traversal
+        List<Integer> preorder = new ArrayList<>();
+        
+        // Initialize stack for iterative traversal
+        Stack<TreeNode> stack = new Stack<>();  // Fixed: Stack should be of TreeNode type
+        
+        // Return empty list if tree is empty
+        if (root == null) {
+            return preorder;
+        }
+        
+        // Push root to start traversal
+        stack.push(root);
+        
+        // Process nodes while stack is not empty
+        while (!stack.isEmpty()) {
+            // Pop current node and add its value to result
+            root = stack.pop();
+            preorder.add(root.val);
+            
+            // Push right child first (so it's processed after left)
+            if (root.right != null) {
+                stack.push(root.right);
+            }
+            
+            // Push left child last (so it's processed first)
+            if (root.left != null) {
+                stack.push(root.left);
+            }
+        }
+        
+        return preorder;
+    }
+}

@@ -1,0 +1,50 @@
+class Solution {
+    /**
+     * Performs a level-order (breadth-first) traversal of a binary tree.
+     * 
+     * Time Complexity: O(n) where n is the number of nodes in the tree
+     * - Each node is processed exactly once
+     * 
+     * Space Complexity: O(w) where w is the maximum width of the tree
+     * - Queue will store at most all nodes at the widest level
+     * - In worst case (complete binary tree), the last level has n/2 nodes
+     *
+     * @param root The root node of the binary tree
+     * @return List of lists containing nodes at each level
+     */
+    public List<List<Integer>> levelOrderTraversal(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> list = new ArrayList<>();
+
+        // Handle empty tree case
+        if(root == null)
+            return list;
+
+        // Initialize queue with root node
+        queue.offer(root);
+
+        // Process nodes level by level
+        while(!q.isEmpty()){
+            // Get number of nodes at current level
+            int level = q.size();
+            List<Integer> subList = new ArrayList<>();
+
+            // Process all nodes at current level
+            for(int i = 0; i < level; i++){
+                // Add left child to queue if exists
+                if(queue.peek().left() != null)
+                    queue.offer(queue.peek().left());
+                
+                // Add right child to queue if exists
+                if(queue.peek().right() != null)
+                    queue.offer(queue.peek().right());
+                
+                // Add current node's value to current level list
+                subList.add(queue.poll().val);
+            }
+            // Add current level's list to result
+            list.add(subList);
+        }
+        return list;
+    }
+}

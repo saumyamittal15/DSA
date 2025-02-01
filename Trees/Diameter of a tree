@@ -1,0 +1,40 @@
+/**
+ * Solution for finding the diameter of a binary tree
+ * Time Complexity: O(n) where n is the number of nodes in the tree
+ * Space Complexity: O(h) where h is the height of the tree (due to recursion stack)
+ *                  In worst case (skewed tree) it can be O(n)
+ *                  In balanced tree it would be O(log n)
+ */
+class Solution {
+    // Global variable to keep track of the maximum diameter found so far
+    private int diameter;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+        diameter = 0;
+        calculateHeight(root);
+        return diameter;
+    }
+
+    /**
+     * Calculates height of each node and updates diameter if necessary
+     * @param node Current node being processed
+     * @return Height of the current node
+     */
+    private int calculateHeight(TreeNode node){
+        // Base case: null node has height 0
+        if(node == null){
+            return 0;
+        }
+
+        // Recursively calculate heights of left and right subtrees
+        int leftHeight = calculateHeight(node.left);
+        int rightHeight = calculateHeight(node.right);
+
+        // Update diameter if current path (leftHeight + rightHeight) is longer
+        // Note: diameter is the number of edges, not nodes
+        diameter = Math.max(diameter, leftHeight + rightHeight);
+
+        // Return height of current node (max of left/right + 1 for current node)
+        return 1 + Math.max(leftHeight, rightHeight);
+    }
+}

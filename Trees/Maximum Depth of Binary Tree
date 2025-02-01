@@ -1,0 +1,28 @@
+class Solution {
+    /**
+     * Calculates the maximum depth (height) of a binary tree recursively.
+     * Maximum depth is the number of nodes along the longest path 
+     * from the root node down to the farthest leaf node.
+     * 
+     * Time Complexity: O(n) where n is the number of nodes in the tree
+     * - Each node is visited exactly once during the recursive traversal
+     * 
+     * Space Complexity: O(h) where h is the height of the tree
+     * - Due to recursive call stack
+     * - Best case (balanced tree): O(log n)
+     * - Worst case (skewed tree): O(n)
+     *
+     * @param root The root node of the binary tree
+     * @return The maximum depth of the binary tree
+     */
+    public int maxDepth(TreeNode root) {
+        // Base case: if root is null, depth is 0
+        if(root == null) {
+            return 0;
+        }
+        
+        // Recursively calculate depth of left and right subtrees
+        // Add 1 to account for the current node
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
+}

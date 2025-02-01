@@ -1,0 +1,43 @@
+/**
+ * This class contains a method to invert a binary tree.
+ * Inverting a binary tree means swapping the left and right children of all nodes in the tree.
+ */
+class Solution {
+    /**
+     * Inverts a binary tree by recursively swapping left and right children.
+     *
+     * @param root The root node of the binary tree.
+     * @return The root node of the inverted binary tree.
+     */
+    public TreeNode invertTree(TreeNode root) {
+        // Base case: If the current node is null, return null.
+        if (root == null) 
+            return null;
+
+        // Create a new node with the same value as the current root node.
+        TreeNode node = new TreeNode(root.val);
+
+        // Recursively invert the left subtree and assign it to the right child of the new node.
+        node.right = invertTree(root.left);
+
+        // Recursively invert the right subtree and assign it to the left child of the new node.
+        node.left = invertTree(root.right);
+
+        // Return the newly created node, which is now the root of the inverted subtree.
+        return node;
+    }
+}
+
+/**
+ * Time Complexity:
+ * - The function visits each node in the binary tree exactly once, performing constant-time operations
+ *   (creating a new node and swapping pointers) for each node. Therefore, the time complexity is O(n),
+ *   where n is the number of nodes in the binary tree.
+ *
+ * Space Complexity:
+ * - The space complexity is determined by the maximum depth of the recursion stack, which corresponds
+ *   to the height of the tree. In the worst case (a skewed tree), this could be O(n). In a balanced tree,
+ *   it would be O(log n). Additionally, since a new TreeNode is created for each existing TreeNode,
+ *   additional space proportional to O(n) is used for storing these new nodes. Thus, overall space complexity
+ *   is O(n).
+ */
