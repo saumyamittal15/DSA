@@ -1,0 +1,63 @@
+class Solution {
+    // List to store the final result of all possible palindrome partitions
+    List<List<String>> result;
+
+    public List<List<String>> partition(String s) {
+        result = new ArrayList<>();
+        // Temporary list to store substrings for a particular partition
+        List<String> substrings = new ArrayList<>();
+        // Start the backtracking process from index 0
+        partition(0, s, substrings);
+        return result;
+    }
+
+    private void partition(int index, String s, List<String> substrings) {
+        // Base case: if the index reaches the end of the string, add the current partition to the result
+        if (index == s.length()) {
+            result.add(new ArrayList<>(substrings)); // Add a copy of the current list
+            return;
+        }
+
+        // Iterate through all possible substrings starting from 'index'
+        for (int i = index; i < s.length(); i++) {
+            // Check if the substring from 'index' to 'i' is a palindrome
+            if (isPalindrome(s, index, i)) {
+                // If it is a palindrome, add it to the current partition
+                substrings.add(s.substring(index, i + 1));
+                // Recursively call partition for the next index
+                partition(i + 1, s, substrings);
+                // Backtrack: remove the last added substring to explore other possibilities
+                substrings.remove(substrings.size() - 1);
+            }
+        }
+    }
+
+    private boolean isPalindrome(String s, int start, int end) {
+        // Check if the substring from 'start' to 'end' is a palindrome
+        while (start <= end) {
+            if (s.charAt(start) != s.charAt(end)) {
+                return false; // Not a palindrome
+            }
+            start++;
+            end--;
+        }
+        return true; // Is a palindrome
+    }
+}
+
+/*
+Space and Time Complexity Analysis:
+
+Time Complexity:
+- The time complexity of this solution is O(n * 2^n), where n is the length of the input string `s`.
+- Explanation:
+  - There are 2^n possible subsets of the string because each character can either be included in a substring or not.
+  - For each subset, checking whether it forms palindromic partitions involves iterating over parts of the string (O(n)).
+  - Therefore, combining these gives O(n * 2^n).
+
+Space Complexity:
+- The space complexity is O(n), where n is the length of the string `s`.
+- Explanation:
+  - The recursion stack can go as deep as n in the worst case.
+  - Additionally, temporary storage for substrings in `substrings` also contributes to O(n).
+*/

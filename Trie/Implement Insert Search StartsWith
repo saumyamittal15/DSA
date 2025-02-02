@@ -1,0 +1,77 @@
+// Node class represents a single node in the Trie structure
+class Node {
+
+    private char value; // Character value stored in this node
+    private boolean isWord; // Flag to indicate if this node marks the end of a word
+    private Node[] children; // Array of child nodes (size 26 for each letter of the alphabet)
+
+    // Constructor to initialize a Node with a character value
+    public Node(char val) {
+        this.value = val;
+        this.isWord = false; // Initially, it does not mark the end of any word
+        this.children = new Node[26]; // Initialize children array with nulls
+    }
+}
+
+// Trie class represents the Trie data structure
+class Trie {
+
+    Node root; // Root node of the Trie
+
+    // Constructor initializes the Trie with a dummy root node (character '\0')
+    public Trie() {
+        root = new Node('\0'); // Dummy root node
+    }
+
+    // Method to insert a word into the Trie
+    public void insert(String word) {
+        Node curr = root; // Start from the root node
+        for (char x : word.toCharArray()) { // Iterate through each character in the word
+            if (curr.children[x - 'a'] == null) { 
+                // If there is no child node for the current character, create one
+                curr.children[x - 'a'] = new Node(x);
+            }
+            curr = curr.children[x - 'a']; // Move to the child node for the current character
+        }
+        curr.isWord = true; // Mark the last node as the end of a valid word
+    }
+
+    // Method to search for a complete word in the Trie
+    public boolean search(String word) {
+        Node res = getLast(word); // Get the last node corresponding to the word
+        return (res != null && res.isWord); 
+        // Return true if the last node exists and marks the end of a valid word
+    }
+
+    // Helper method to retrieve the last node corresponding to a given string (word or prefix)
+    public Node getLast(String word) {
+        Node curr = root; // Start from the root node
+        for (char x : word.toCharArray()) { 
+            if (curr.children[x - 'a'] == null) {
+                return null; // If any character is missing, return null
+            }
+            curr = curr.children[x - 'a']; // Move to the child node for the current character
+        }
+        return curr; // Return the last node after traversing all characters
+    }
+
+    // Method to check if there is any word in the Trie that starts with a given prefix
+    public boolean startsWith(String prefix) {
+        Node res = getLast(prefix); // Get the last node corresponding to the prefix
+        if (res == null) return false; 
+        // If no such node exists, return false. Otherwise, return true.
+        return true;
+    }
+}
+
+/*
+Space Complexity:
+1. The space complexity is O(ALPHABET_SIZE * N), where ALPHABET_SIZE is 26 (for lowercase English letters),
+   and N is the total number of characters across all inserted words. Each node can have up to 26 children.
+2. Space usage increases as more unique prefixes are added.
+
+Time Complexity:
+1. Insert: O(L), where L is the length of the word being inserted. For each character, we traverse or create one level in the Trie.
+2. Search: O(L), where L is the length of the word being searched. We traverse one level per character.
+3. StartsWith: O(L), where L is the length of the prefix. Similar traversal as search.
+*/

@@ -1,0 +1,46 @@
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        // Result list to store all unique subsets
+        List<List<Integer>> result = new ArrayList<>();
+        // Temporary list to store the current subset
+        List<Integer> subset = new ArrayList<>();
+        // Sort the array to handle duplicates
+        Arrays.sort(nums);
+        // Start backtracking from index 0
+        backtrack(nums, result, subset, 0);
+        return result;
+    }
+
+    private void backtrack(int[] nums, List<List<Integer>> result, List<Integer> subset, int index) {
+        // Add a copy of the current subset to the result
+        result.add(new ArrayList<>(subset));
+
+        // Iterate through the array starting from the current index
+        for (int i = index; i < nums.length; i++) {
+            // Skip duplicates by checking if the current element is the same as the previous one
+            if (i > index && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            // Include the current element in the subset
+            subset.add(nums[i]);
+            // Recursively call backtrack for the next elements
+            backtrack(nums, result, subset, i + 1);
+            // Remove the last added element to backtrack and explore other possibilities
+            subset.remove(subset.size() - 1);
+        }
+    }
+}
+
+/*
+Time Complexity:
+- Sorting the array takes O(n log n), where n is the length of `nums`.
+- The backtracking algorithm generates all possible subsets. In the worst case (no duplicates), there are 2^n subsets, and each subset takes O(n) time to copy into the result.
+- Therefore, the overall time complexity is O(n * 2^n).
+
+Space Complexity:
+- The space used by the recursion stack is O(n) in the worst case (the depth of recursion equals `n`).
+- Additionally, temporary storage for subsets during recursion can take up to O(n).
+- The space required for storing all subsets in `result` is O(2^n * n) in the worst case.
+- Hence, the total space complexity is O(2^n * n).
+*/
