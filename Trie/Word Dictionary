@@ -1,0 +1,106 @@
+/**
+ * This class implements a WordDictionary using a Trie (prefix tree) data structure.
+ * It supports adding words to the dictionary and searching for words, including
+ * words with wildcard characters ('.') that can match any letter.
+ *
+ * Space Complexity:
+ * - The space complexity is O(N * L), where N is the number of words added to the dictionary,
+ *   and L is the average length of the words. This accounts for storing each character in the Trie.
+ *
+ * Time Complexity:
+ * - addWord(word): O(L), where L is the length of the word being added. Each character of the word
+ *   is processed once while traversing or creating nodes in the Trie.
+ * - search(word): In the worst case, the time complexity is O(M^2), where M is the length of the word being searched.
+ *   This happens because for each wildcard character ('.'), we may need to explore all 26 children nodes recursively.
+ */
+
+class WordDictionary {
+
+    // Root node of the Trie
+    Node root;
+
+    // Inner class representing a single node in the Trie
+    private class Node {
+        char value; // Character stored at this node
+        boolean isWord; // Indicates if this node marks the end of a valid word
+        Node[] children; // Array to store references to child nodes (for 26 lowercase letters)
+
+        public Node(char value) {
+            this.value = value;
+            isWord = false; // Initially, this node does not represent a complete word
+            children = new Node[26]; // Initialize an array for 26 lowercase English letters
+        }
+    }
+
+    // Constructor to initialize the WordDictionary with an empty root node
+    public WordDictionary() {
+        root = new Node('\0'); // Root node has a dummy value '\0' (null character)
+    }
+
+    /**
+     * Adds a word to the dictionary by inserting it into the Trie.
+     *
+     * Time Complexity: O(L), where L is the length of the word.
+     */
+    public void addWord(String word) {
+        Node curr = root; // Start from the root node
+
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i); // Get each character in the word
+
+            // If there is no child node for this character, create one
+            if (curr.children[ch - 'a'] == null) {
+                curr.children[ch - 'a'] = new Node(ch);
+            }
+
+            // Move to the child node corresponding to this character
+            curr = curr.children[ch - 'a'];
+        }
+
+        curr.isWord = true; // Mark the last node as representing a complete word
+    }
+
+    /**
+     * Searches for a word in the dictionary. The word can include '.' as a wildcard,
+     * which matches any single letter.
+     *
+     * Time Complexity: O(M^2) in the worst case, where M is the length of the word being searched.
+     */
+    public boolean search(String word) {
+        return searchHelper(word, root, 0); // Start recursive search from root and index 0
+    }
+
+    /**
+     * Helper method for searching a word in the Trie recursively.
+     *
+     * @param word The word to search for (may include '.')
+     * @param curr The current Trie node being examined
+     * @param index The current index in the word being processed
+     * @return True if a matching word exists in the dictionary, false otherwise
+     */
+    private boolean searchHelper(String word, Node curr, int index) {
+        // Iterate through characters starting from 'index'
+        for (int i = index; i < word.length(); i++) {
+            char ch = word.charAt(i); // Get current character
+
+            if (ch == '.') { // If wildcard '.', try all possible children nodes
+                for (Node temp : curr.children) {
+                    if (temp != null && searchHelper(word, temp, i + 1)) { 
+                        return true; // If any child path matches, return true
+                    }
+                }
+                return false; // If no child path matches, return false
+            }
+
+            // If no child exists for this character, return false
+            if (curr.children[ch - 'a'] == null) {
+                return false;
+            }
+
+            // Move to the child node corresponding to this character
+            curr = curr.children[ch - 'a'];
+        }
+
+        return curr.isWord; // Return true if current node marks end of a valid word
+    }
+}
