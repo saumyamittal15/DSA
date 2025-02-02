@@ -1,0 +1,112 @@
+import java.util.*;
+
+class Twitter {
+  int count; // Global counter to keep track of the order of tweets
+  HashMap<Integer, List<int[]>> tweetMap; // Maps userId to a list of their tweets [timestamp, tweetId]
+  HashMap<Integer, HashSet<Integer>> followerMap; // Maps userId to a set of users they follow
+
+  public Twitter() {
+    count = 0; // Initialize the global timestamp counter
+    tweetMap = new HashMap<>(); // Initialize the map for storing tweets
+    followerMap = new HashMap<>(); // Initialize the map for storing followers
+  }
+
+  /**
+   * Post a tweet for a specific user.
+   * @param userId - ID of the user posting the tweet
+   * @param tweetId - ID of the tweet being posted
+   */
+  public void postTweet(int userId, int tweetId) {
+    // Ensure the user has an entry in the tweetMap
+    tweetMap.computeIfAbsent(userId, k -> new ArrayList<>());
+
+    // Add the new tweet with its timestamp to the user's list of tweets
+    tweetMap.computeIfPresent(userId, (k, v) -> {
+      v.add(new int[]{count, tweetId}); // Store [timestamp, tweetId]
+      return v;
+    });
+
+    ++count; // Increment the global timestamp counter
+  }
+
+  /**
+   * Retrieve the 10 most recent tweets in the user's news feed.
+   * The news feed includes tweets from the user and their followees.
+   * @param userId - ID of the user requesting their news feed
+   * @return List of up to 10 most recent tweet IDs
+   */
+  public List<Integer> getNewsFeed(int userId) {
+    List<Integer> res = new ArrayList<>(); // Result list for storing up to 10 tweets
+
+    // Priority queue to sort tweets by timestamp in descending order
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> 
+      Integer.compare(b[0], a[0]) // Sort by timestamp (most recent first)
+    );
+
+    // Ensure the user has an entry in the follower map and follows themselves
+    followerMap.computeIfAbsent(userId, k -> new HashSet<>());
+    followerMap.get(userId).add(userId);
+
+    // Add the most recent tweet from each followee to the priority queue
+    followerMap.get(userId).forEach((followeeId) -> {
+      if (tweetMap.containsKey(followeeId)) {
+        int i = tweetMap.get(followeeId).size() - 1; // Index of the latest tweet
+        int[] tweet = tweetMap.get(followeeId).get(i); 
+        pq.offer(new int[]{tweet[0], tweet[1], followeeId, --i});  
+      }
+    });
+
+    // Retrieve up to 10 most recent tweets from the priority queue
+    while (!pq.isEmpty() && res.size() < 10) {
+      int[] data = pq.poll(); // Get the most recent tweet from the queue
+      res.add(data[1]); // Add its ID to the result list
+
+      if (data[3] >= 0) { // If there are more tweets from this followee
+        int[] tweet = tweetMap.get(data[2]).get(data[3]); 
+        pq.offer(new int[]{tweet[0], tweet[1], data[2], --data[3]});
+      }
+    }
+
+    return res;
+  }
+
+  /**
+   * Follow a specific user.
+   * @param followerId - ID of the follower
+   * @param followeeId - ID of the followee
+   */
+  public void follow(int followerId, int followeeId) {
+    // Ensure the follower has an entry in the follower map
+    followerMap.computeIfAbsent(followerId, k -> new HashSet<>());
+
+    // Add the followee to their set of followed users
+    followerMap.computeIfPresent(followerId, (k, v) -> {
+      v.add(followeeId);
+      return v;
+    });
+  }
+
+  /**
+   * Unfollow a specific user.
+   * @param followerId - ID of the follower
+   * @param followeeId - ID of the followee to unfollow
+   */
+  public void unfollow(int followerId, int followeeId) {
+    HashSet<Integer> set = followerMap.computeIfAbsent(followerId, k -> new HashSet<>());
+
+    if (set.contains(followeeId)) { 
+      set.remove(followeeId); // Remove followee from their set of followed users
+    }
+  }
+}
+
+/**
+ * Space Complexity:
+ * - `tweetMap`: O(U + T), where U is the number of unique users and T is the total number of tweets.
+ * - `followerMap`: O(U + F), where U is the number of unique users and F is the total number of follows.
+ *
+ * Time Complexity:
+ * - `postTweet`: O(1), as adding a new tweet involves appending to a list.
+ * - `getNewsFeed`: O(U + T*log(U)), where U is the number of users followed by `userId` and T is their total tweets. The log(U) comes from maintaining a priority queue.
+ * - `follow`/`unfollow`: O(1), as adding/removing elements in a hash set is constant on average.
+ */

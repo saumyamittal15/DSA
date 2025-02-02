@@ -1,0 +1,42 @@
+/**
+ * Solution to validate if a binary tree is a valid Binary Search Tree (BST)
+ * Time Complexity: O(n) where n is the number of nodes in the tree
+ * Space Complexity: O(h) where h is the height of the tree (due to recursion stack)
+ *                  In worst case (skewed tree): O(n)
+ *                  In balanced tree: O(log n)
+ */
+class Solution {
+    /**
+     * Main method to check if the given binary tree is a valid BST
+     * @param root Root node of the binary tree
+     * @return true if the tree is a valid BST, false otherwise
+     */
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) 
+            return true;
+        return dfs(root, null, null);
+    }
+
+    /**
+     * Helper method that performs depth-first search with range validation
+     * @param root Current node being examined
+     * @param min Lower bound for the current node's value (inclusive)
+     * @param max Upper bound for the current node's value (exclusive)
+     * @return true if the subtree rooted at current node is a valid BST
+     */
+    private boolean dfs(TreeNode root, Integer min, Integer max) {
+        // Base case: empty tree is valid
+        if (root == null) 
+            return true;
+
+        // Check if current node's value is within the valid range
+        if ((min != null && root.val <= min) || max != null && root.val >= max) {
+            return false;
+        }
+
+        // Recursively validate left and right subtrees
+        // Left subtree: all values must be less than current node's value
+        // Right subtree: all values must be greater than current node's value
+        return dfs(root.left, min, root.val) && dfs(root.right, root.val, max);
+    }
+}

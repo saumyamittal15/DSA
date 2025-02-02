@@ -1,0 +1,99 @@
+class Solution {
+    /**
+     * Constructs a binary tree from preorder and inorder traversal arrays
+     * Time Complexity: O(n²) - due to searching in inorder array and array copying
+     * Space Complexity: O(n) - due to recursive call stack and array copying
+     * 
+     * @param preorder array containing preorder traversal of the tree
+     * @param inorder array containing inorder traversal of the tree
+     * @return root node of the constructed binary tree
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        // Base case: if either array is empty, return null
+        if (preorder.length == 0 || inorder.length == 0) return null;
+
+        // Create root node from first element of preorder
+        TreeNode root = new TreeNode(preorder[0]);
+        
+        // Find position of root value in inorder array
+        int mid = 0;
+        for (int i = 0; i < inorder.length; i++) {
+            if (preorder[0] == inorder[i]) 
+                mid = i;
+        }
+
+        // Recursively build left subtree
+        root.left = buildTree(
+            Arrays.copyOfRange(preorder, 1, mid + 1),
+            Arrays.copyOfRange(inorder, 0, mid)
+        );
+        
+        // Recursively build right subtree
+        root.right = buildTree(
+            Arrays.copyOfRange(preorder, mid + 1, preorder.length),
+            Arrays.copyOfRange(inorder, mid + 1, inorder.length)
+        );
+
+        return root;
+    }
+}
+
+
+/*******************/
+/**
+ * Optimized solution using HashMap to store inorder positions
+ * Time Complexity: O(n) - we visit each node once
+ * Space Complexity: O(n) - for HashMap and recursive call stack
+ */
+class Solution {
+    // HashMap to store value-to-index mapping for inorder array
+    Map<Integer, Integer> inorderPositions = new HashMap<>();
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder.length < 1 || inorder.length < 1) return null;
+
+        // Build HashMap for O(1) lookup of values in inorder array
+        for (int i = 0; i < inorder.length; i++) {
+            inorderPositions.put(inorder[i], i);
+        }
+
+        return builder(preorder, 0, 0, inorder.length - 1);
+    }
+
+    /**
+     * Helper method to construct the tree using array indices
+     * @param preorder preorder traversal array
+     * @param preorderIndex current index in preorder array
+     * @param inorderLow left boundary in inorder array
+     * @param inorderHigh right boundary in inorder array
+     * @return root node of current subtree
+     */
+    private TreeNode builder(
+        int[] preorder,
+        int preorderIndex,
+        int inorderLow,
+        int inorderHigh
+    ) {
+        // Base case: invalid indices
+        if (preorderIndex > preorder.length - 1 || inorderLow > inorderHigh) 
+            return null;
+
+        // Create current node
+        int currentVal = preorder[preorderIndex];
+        TreeNode n = new TreeNode(currentVal);
+        
+        // Find position in inorder array using HashMap
+        int mid = inorderPositions.get(currentVal);
+
+        // Recursively build left and right subtrees
+        n.left = builder(preorder, preorderIndex + 1, inorderLow, mid - 1);
+        n.right = builder(
+            preorder,
+            preorderIndex + (mid - inorderLow) + 1,
+            mid + 1,
+            inorderHigh
+        );
+
+        return n;
+    }
+}

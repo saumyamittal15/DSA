@@ -1,0 +1,33 @@
+class Solution {
+
+    public int findKthLargest(int[] nums, int k) {
+        // Create a min-heap using a PriorityQueue
+        PriorityQueue<Integer> heap = new PriorityQueue();
+
+        // Iterate through each number in the array
+        for (int n : nums) {
+            // Add the current number to the heap
+            heap.add(n);
+            // If the size of the heap exceeds k, remove the smallest element (root of the heap)
+            if (heap.size() > k) {
+                heap.poll();
+            }
+        }
+        // At this point, the heap contains only k largest elements,
+        // and the root of the heap is the kth largest element
+        return heap.peek();
+    }
+}
+
+/*
+Space Complexity:
+- The space complexity is O(k), where k is the size of the min-heap. 
+  This is because at any given time, the heap stores at most k elements.
+
+Time Complexity:
+- Adding an element to a heap takes O(log k) time. 
+  Since we iterate over all n elements in the array and maintain a heap of size k:
+  - For each of the n elements, we perform an add operation (O(log k)).
+  - In case the heap size exceeds k, we perform a poll operation (O(log k)).
+  - Thus, the total time complexity is O(n log k), where n is the number of elements in the array.
+*/

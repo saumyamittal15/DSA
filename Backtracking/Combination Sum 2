@@ -1,0 +1,35 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+class Solution {
+
+    // List to store the final result of all unique combinations
+    List<List<Integer>> result;
+
+    /**
+     * Main method to find all unique combinations of numbers that sum up to the target.
+     * Each number in candidates can only be used once in a combination.
+     *
+     * @param candidates Array of integers (candidates).
+     * @param target Target sum.
+     * @return List of lists containing all unique combinations.
+     */
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        result = new ArrayList<>(); // Initialize the result list
+        List<Integer> combinationSum = new ArrayList<>(); // Temporary list to store the current combination
+        Arrays.sort(candidates); // Sort the array to handle duplicates
+        backtrack(candidates, target, combinationSum, 0); // Start backtracking from index 0
+        return result; // Return the result list
+    }
+
+    /**
+     * Helper method to perform backtracking.
+     *
+     * @param candidates Array of integers (candidates).
+     * @param target Remaining target sum.
+     * @param combinationSum Current combination being built.
+     * @param index Current index in the array.
+     */
+    private void backtrack(int[] candidates, int target, List<Integer> combinationSum, int index) {
+        // Base case: if the targ

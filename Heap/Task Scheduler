@@ -1,0 +1,54 @@
+class Solution {
+
+    public int leastInterval(char[] tasks, int n) {
+        // If there is no cooldown period, the minimum time required is the number of tasks
+        if (n == 0) return tasks.length;
+
+        // PriorityQueue to store task frequencies in descending order
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+
+        // Queue to track tasks that are cooling down along with their release time
+        Queue<Pair<Integer, Integer>> q = new LinkedList<>();
+
+        // Array to count the frequency of each task (assuming tasks are uppercase A-Z)
+        int[] arr = new int[26];
+        for (char c : tasks) arr[c - 'A']++;
+
+        // Add non-zero frequencies to the priority queue
+        for (int val : arr) if (val > 0) pq.add(val);
+
+        int time = 0; // Variable to track the total time taken
+
+        // Loop until both the priority queue and cooldown queue are empty
+        while ((!pq.isEmpty() || !q.isEmpty())) {
+            time++; // Increment time at each step
+
+            // If there are tasks available in the priority queue, process one
+            if (!pq.isEmpty()) {
+                int val = pq.poll(); // Get the task with the highest frequency
+                val--; // Decrement its frequency as it is executed once
+                if (val > 0) 
+                    q.add(new Pair(val, time + n)); // Add it to cooldown queue with its release time
+            }
+
+            // Check if any task in the cooldown queue can be added back to the priority queue
+            if (!q.isEmpty() && q.peek().getValue() == time) 
+                pq.add(q.poll().getKey());
+        }
+
+        return time; // Return the total time taken to execute all tasks
+    }
+}
+
+/*
+Space Complexity:
+- The space complexity is O(1) for the `arr` array (fixed size of 26).
+- The `PriorityQueue` and `Queue` can hold at most O(tasks.length) elements in total.
+- Overall, space complexity is O(tasks.length).
+
+Time Complexity:
+- Counting frequencies requires O(tasks.length).
+- Each task is added and removed from the priority queue at most once, so operations on the priority queue take O(tasks.length * log(26)) ≈ O(tasks.length).
+- Similarly, each task is added and removed from the cooldown queue at most once.
+- Overall, time complexity is O(tasks.length * log(26)) ≈ O(tasks.length).
+*/

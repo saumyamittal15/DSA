@@ -1,0 +1,58 @@
+class Solution {
+    public int lastStoneWeight(int[] stones) {
+        
+        // Create a max-heap (priority queue in reverse order)
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>(Collections.reverseOrder());
+
+        // Add all stones to the max-heap
+        for(int stone : stones){
+            pq.add(stone);
+        }
+
+        // While there is more than one stone in the heap
+        while(pq.size() > 1){
+            // Poll the two largest stones, smash them, and add the result back to the heap
+            pq.add(pq.poll() - pq.poll());
+        }
+
+        // Return the last remaining stone or 0 if no stones are left
+        return pq.poll();  
+    }
+}
+
+/*****
+class Solution {
+
+    public int lastStoneWeight(int[] stones) {
+        // Create a max-heap by negating values (since Java's PriorityQueue is a min-heap by default)
+        PriorityQueue<Integer> maxHeap = new PriorityQueue();
+        
+        // Add all stones to the heap as negative values
+        for (int stone : stones) maxHeap.add(-stone);
+        
+        // While there is more than one stone in the heap
+        while (maxHeap.size() > 1) {
+            // Remove the two largest stones (smallest negative values)
+            int stone1 = maxHeap.remove();
+            int stone2 = maxHeap.remove();
+            
+            // If they are not equal, add the difference back to the heap
+            if (stone1 != stone2) maxHeap.add(stone1 - stone2);
+        }
+        
+        // Return the last remaining stone (negated back to positive) or 0 if no stones are left
+        return maxHeap.size() != 0 ? (-maxHeap.remove()) : 0;
+    }
+}
+*/
+
+/*
+Time Complexity:
+1. Adding all elements to the priority queue takes O(n log n), where n is the number of stones.
+2. Each poll and add operation in the priority queue takes O(log n), and since we perform this up to n times, it adds up to O(n log n).
+Overall time complexity: O(n log n).
+
+Space Complexity:
+1. The priority queue stores up to n elements, so it requires O(n) space.
+Overall space complexity: O(n).
+*/

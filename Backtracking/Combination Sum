@@ -1,0 +1,58 @@
+public class Solution {
+    // List to store the final result of all combinations
+    List<List<Integer>> res;
+
+    /**
+     * Method to find all unique combinations of numbers that sum up to the target.
+     * @param nums Array of integers (candidates).
+     * @param target Target sum.
+     * @return List of lists containing all unique combinations.
+     */
+    public List<List<Integer>> combinationSum(int[] nums, int target) {
+        res = new ArrayList<List<Integer>>(); // Initialize the result list
+        List<Integer> cur = new ArrayList(); // Temporary list to store the current combination
+        backtrack(nums, target, cur, 0); // Start backtracking from index 0
+        return res; // Return the result list
+    }
+
+    /**
+     * Helper method to perform backtracking.
+     * @param nums Array of integers (candidates).
+     * @param target Remaining target sum.
+     * @param cur Current combination being built.
+     * @param i Current index in the array.
+     */
+    public void backtrack(int[] nums, int target, List<Integer> cur, int i) {
+        // If the target becomes 0, we found a valid combination
+        if (target == 0) {
+            res.add(new ArrayList(cur)); // Add a copy of the current combination to the result
+            return;
+        }
+        // If the target becomes negative or we exceed the array bounds, stop further exploration
+        if (target < 0 || i >= nums.length) {
+            return;
+        }
+
+        // Include the current number in the combination
+        cur.add(nums[i]);
+        // Recurse with reduced target and same index (allowing reuse of the same number)
+        backtrack(nums, target - nums[i], cur, i);
+        // Backtrack: remove the last added number to explore other possibilities
+        cur.remove(cur.size() - 1);
+        // Recurse with the next index (exclude current number for next exploration)
+        backtrack(nums, target, cur, i + 1);
+    }
+}
+
+/**
+ * Space and Time Complexity:
+ *
+ * Time Complexity: O(2^t), where t is the target value. 
+ * In the worst case, every number in `nums` can be used multiple times to reach the target,
+ * resulting in an exponential number of combinations. The exact complexity depends on 
+ * both `nums` and `target`.
+ *
+ * Space Complexity: O(t), where t is the target value. 
+ * This is due to the recursion stack and temporary list `cur`, which can grow up to 
+ * a depth equal to `target` in case of deep recursion.
+ */

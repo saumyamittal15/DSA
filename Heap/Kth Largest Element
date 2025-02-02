@@ -1,0 +1,48 @@
+/**
+ * Class to find the kth largest element in a stream of numbers
+ * Space Complexity: O(k) - stores at most k elements in the min heap
+ * Time Complexity: 
+ * - Constructor: O(n * log k) where n is the length of input array
+ * - Add method: O(log k) for heap operations
+ */
+class KthLargest {
+    
+    // k represents the kth largest element we need to find
+    private int k;
+    // minHeap maintains k largest elements with smallest among them at root
+    private PriorityQueue<Integer> minHeap;
+
+    /**
+     * Constructor initializes the data structure
+     * @param k the kth largest element to find
+     * @param nums initial array of numbers
+     */
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        // Initialize min heap with capacity k
+        this.minHeap = new PriorityQueue<>(k);
+
+        // Process initial array of numbers
+        for(int num : nums){
+            add(num);
+        }
+    }
+    
+    /**
+     * Adds new value to the stream and returns kth largest element
+     * @param val new value to add
+     * @return kth largest element after adding val
+     */
+    public int add(int val) {
+        // Add new value to min heap
+        minHeap.offer(val);
+
+        // If heap size exceeds k, remove the smallest element
+        if(minHeap.size() > k){
+            minHeap.poll();
+        }
+
+        // Return the root (kth largest element)
+        return minHeap.peek();
+    }
+}

@@ -1,0 +1,56 @@
+/**
+ * Solution to find the kth smallest element in a Binary Search Tree (BST)
+ * using optimized inorder traversal with counter
+ * 
+ * Time Complexity: O(k) 
+ *      - We only traverse until we find the kth element
+ *      - In worst case, k could be N (number of nodes)
+ * 
+ * Space Complexity: O(H) where H is height of the tree
+ *      - Only recursion stack space is used
+ *      - Best case (balanced tree): O(log N)
+ *      - Worst case (skewed tree): O(N)
+ */
+class Solution {
+    // Class level variable to keep track of count during traversal
+    private int count = 0;
+    // Class level variable to store the result
+    private int result = 0;
+    
+    /**
+     * Main method to find kth smallest element
+     * @param root Root node of the BST
+     * @param k Position of the element to find (1-based indexing)
+     * @return The kth smallest value in the BST
+     */
+    public int kthSmallest(TreeNode root, int k) {
+        // Perform inorder traversal with counter
+        inorderWithCounter(root, k);
+        return result;
+    }
+
+    /**
+     * Helper method for inorder traversal with counter
+     * Stops traversal once kth element is found
+     * @param root Current node being processed
+     * @param k Target position to find
+     */
+    private void inorderWithCounter(TreeNode root, int k) {
+        // Base cases: if node is null or kth element is already found
+        if (root == null || count >= k) return;
+
+        // Traverse left subtree
+        inorderWithCounter(root.left, k);
+        
+        // Process current node
+        count++;
+        // If current node is kth element, store it and return
+        if (count == k) {
+            result = root.val;
+            return;
+        }
+        
+        // Traverse right subtree
+        inorderWithCounter(root.right, k);
+    }
+}
