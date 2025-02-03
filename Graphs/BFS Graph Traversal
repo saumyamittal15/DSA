@@ -1,0 +1,51 @@
+class Solution {
+    public ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+
+        // List to store the BFS traversal result
+        ArrayList<Integer> bfs = new ArrayList<>();
+        
+        // Boolean array to keep track of visited nodes
+        boolean[] visited = new boolean[V];
+        
+        // Queue to facilitate BFS traversal
+        Queue<Integer> queue = new LinkedList<>();
+
+        // Start BFS from the first node (node 0)
+        queue.add(0);
+        visited[0] = true;
+
+        // Loop until the queue is empty
+        while (!queue.isEmpty()) {
+            // Dequeue a node from the front of the queue
+            Integer node = queue.poll();
+            
+            // Add the dequeued node to the BFS result
+            bfs.add(node);
+
+            // Iterate through all adjacent nodes of the current node
+            for (Integer neighbor : adj.get(node)) {
+                // If the neighbor has not been visited, mark it as visited and enqueue it
+                if (visited[neighbor] == false) {
+                    visited[neighbor] = true;  
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        // Return the BFS traversal result
+        return bfs;
+    }
+}
+
+/*
+Space Complexity:
+1. The `visited` array takes O(V) space, where V is the number of vertices.
+2. The `queue` can hold up to O(V) elements in the worst case.
+3. The `bfs` list also takes O(V) space to store the result.
+Overall, space complexity is O(V).
+
+Time Complexity:
+1. Each vertex is enqueued and dequeued once, which takes O(V) time.
+2. For each vertex, we iterate through its adjacency list. The total number of iterations across all vertices is proportional to the number of edges, E.
+Thus, time complexity is O(V + E), where V is the number of vertices and E is the number of edges.
+*/

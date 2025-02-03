@@ -1,0 +1,62 @@
+class Solution {
+    public int numberOfProvinces(ArrayList<ArrayList<Integer>> adj, int V) {
+        // Convert adjacency matrix to adjacency list for easier traversal
+        ArrayList<ArrayList<Integer>> adjLs = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adjLs.add(new ArrayList<Integer>());
+        }
+
+        // Populate the adjacency list from the adjacency matrix
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                // If there is an edge between node i and node j, add it to the adjacency list
+                if (adj.get(i).get(j) == 1 && i != j) {
+                    adjLs.get(i).add(j);
+                    adjLs.get(j).add(i); // Since it's an undirected graph
+                }
+            }
+        }
+
+        // Array to track visited nodes
+        int[] visited = new int[V];
+        int count = 0; // To count the number of provinces (connected components)
+
+        // Perform DFS traversal for each unvisited node
+        for (int i = 0; i < V; i++) {
+            if (visited[i] == 0) { // If the node is not visited
+                count++; // Increment province count
+                dfs(i, adjLs, visited); // Call DFS to mark all connected nodes
+            }
+        }
+
+        return count; // Return the total number of provinces
+    }
+
+    private void dfs(int neighbor, ArrayList<ArrayList<Integer>> adjLs, int[] visited) {
+        visited[neighbor] = 1; // Mark the current node as visited
+
+        // Traverse all neighbors of the current node
+        for (Integer it : adjLs.get(neighbor)) {
+            if (visited[it] == 0) { // If a neighbor is not visited
+                dfs(it, adjLs, visited); // Recursively visit the neighbor
+            }
+        }
+    }
+}
+
+/*
+Time Complexity:
+1. Converting adjacency matrix to adjacency list: O(V^2), where V is the number of vertices.
+   This is because we iterate through all elements of the adjacency matrix.
+2. DFS traversal: O(V + E), where V is the number of vertices and E is the number of edges.
+   Each vertex and edge is processed once during DFS.
+
+Overall Time Complexity: O(V^2) (dominated by adjacency matrix conversion).
+
+Space Complexity:
+1. Adjacency list storage: O(V + E), where V is the number of vertices and E is the number of edges.
+2. Visited array: O(V), to store visited status for each vertex.
+3. Recursive stack space for DFS: O(V) in the worst case.
+
+Overall Space Complexity: O(V + E).
+*/

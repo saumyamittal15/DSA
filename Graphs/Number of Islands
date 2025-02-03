@@ -1,0 +1,135 @@
+class Solution {
+
+    // Function to count the number of islands
+    public int numIslands(char[][] grid) {
+        int count = 0; // Initialize the island count to 0
+        
+        // Traverse through each cell in the grid
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                // If the cell is land ('1'), start a DFS traversal
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j); // Mark all connected land cells as visited
+                    count++; // Increment the island count
+                }
+            }
+        }
+        return count; // Return the total number of islands
+    }
+
+    // Depth-First Search to mark all connected land cells as visited
+    public void dfs(char[][] grid, int i, int j) {
+        // Base case: Check if the cell is out of bounds or water ('0')
+        if (
+            i < 0 || 
+            j < 0 || 
+            i >= grid.length || 
+            j >= grid[0].length || 
+            grid[i][j] == '0'
+        ) {
+            return;
+        }
+
+        // Mark the current cell as visited by changing it to '0'
+        grid[i][j] = '0';
+
+        // Recursively visit all adjacent cells (up, down, left, right)
+        dfs(grid, i + 1, j); // Down
+        dfs(grid, i, j + 1); // Right
+        dfs(grid, i - 1, j); // Up
+        dfs(grid, i, j - 1); // Left
+    }
+}
+
+/*
+Time Complexity:
+- O(n * m), where n is the number of rows and m is the number of columns in the grid.
+- Each cell is visited once during the DFS traversal.
+
+Space Complexity:
+- O(n * m) in the worst case due to recursive stack space when all cells are part of a single island.
+*/
+
+
+import java.util.*;
+
+// Class to represent a pair of coordinates (row, column)
+class Pair {
+    int first;
+    int last;
+
+    public Pair(int first, int last) {
+        this.first = first;
+        this.last = last;
+    }
+}
+
+class Solution {
+
+    // Function to count the number of islands
+    public int numIslands(char[][] grid) {
+        int n = grid.length; // Number of rows in the grid
+        int m = grid[0].length; // Number of columns in the grid
+
+        int[][] visited = new int[n][m]; // To keep track of visited cells
+        int count = 0; // Initialize island count to 0
+
+        // Traverse through each cell in the grid
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < m; col++) {
+                // If the cell is land ('1') and not visited yet, start BFS traversal
+                if (visited[row][col] == 0 && grid[row][col] == '1') {
+                    count++; // Increment island count
+                    bfs(row, col, visited, grid); // Perform BFS to mark all connected land cells as visited
+                }
+            }
+        }
+        return count; // Return total number of islands
+    }
+
+    private void bfs(int ro, int co, int[][] vis, char[][] grid) {
+        vis[ro][co] = 1; // Mark current cell as visited
+
+        Queue<Pair> q = new LinkedList<>(); // Create a queue for BFS traversal
+        q.add(new Pair(ro, co)); // Add initial cell to queue
+
+        int n = grid.length;   // Number of rows in the grid
+        int m = grid[0].length;   // Number of columns in the grid
+
+        while (!q.isEmpty()) {
+            int row = q.peek().first;   // Get current row from queue front
+            int col = q.peek().last;   // Get current column from queue front
+            q.remove();   // Remove current cell from queue
+
+            // Traverse all possible directions (up, down, left, right)
+            for (int deltaRow = -1; deltaRow <= 1; deltaRow++) {
+                for (int deltaCol = -1; deltaCol <= 1; deltaCol++) {
+                    if (Math.abs(deltaRow) + Math.abs(deltaCol) != 1) continue; 
+                    
+                    int nrow = row + deltaRow;
+                    int ncol = col + deltaCol;
+
+                    // Check if new cell is within bounds and unvisited land ('1')
+                    if (
+                        nrow >= 0 && nrow < n && 
+                        ncol >= 0 && ncol < m &&
+                        grid[nrow][ncol] == '1' && 
+                        vis[nrow][ncol] == 0
+                    ) {
+                        vis[nrow][ncol] = 1;   // Mark new cell as visited
+                        q.add(new Pair(nrow, ncol));   // Add new cell to queue for further exploration
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
+Time Complexity:
+- O(n * m), where n is the number of rows and m is the number of columns in the grid.
+- Each cell is visited once during BFS traversal.
+
+Space Complexity:
+- O(n * m) for the `visited` array and BFS queue.
+*/

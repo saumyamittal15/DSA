@@ -1,0 +1,46 @@
+class Solution {
+    
+    // Function to perform Depth First Search (DFS) on a graph
+    public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj){
+        // Create a visited array to track visited nodes
+        boolean visited[] = new boolean[V+1]; 
+        // Mark the first node (0) as visited
+        visited[0] = true; 
+        // Initialize a list to store the DFS traversal result
+        ArrayList<Integer> ls = new ArrayList<>(); 
+        // Call the recursive DFS function starting from node 0
+        dfs(0, visited, adj, ls); 
+        // Return the list of nodes in DFS order
+        return ls; 
+    }
+
+    // Recursive function to perform DFS
+    private void dfs(int node, boolean visited[], ArrayList<ArrayList<Integer>> adj, ArrayList<Integer> ls) {
+        // Mark the current node as visited
+        visited[node] = true; 
+        // Add the current node to the result list
+        ls.add(node); 
+
+        // Iterate through all neighbors of the current node
+        for(Integer neighbor : adj.get(node)){
+            // If the neighbor has not been visited, recursively call DFS on it
+            if(visited[neighbor] == false){
+                dfs(neighbor, visited, adj, ls); 
+            }
+        }
+    }
+
+}
+
+/*
+Space Complexity:
+1. The `visited` array takes O(V) space, where V is the number of vertices.
+2. The recursion stack can go as deep as O(V) in the worst case (for a graph with no cycles).
+3. The result list `ls` stores all vertices once, taking O(V) space.
+Overall Space Complexity: O(V).
+
+Time Complexity:
+1. Each vertex is visited exactly once in the DFS traversal.
+2. For each vertex, we iterate through its adjacency list (neighbors), which in total across all vertices is O(E), where E is the number of edges.
+Overall Time Complexity: O(V + E), where V is the number of vertices and E is the number of edges.
+*/
