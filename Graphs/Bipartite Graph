@@ -1,0 +1,60 @@
+public Boolean isBipartite(int V, ArrayList<ArrayList<Integer>> adj) {
+    // Array to store colors of vertices (-1 indicates no color assigned yet)
+    int color[] = new int[V];
+    
+    // Initialize all vertices with no color (-1)
+    for (int i = 0; i < V; i++) {
+        color[i] = -1;
+    }
+
+    // Check each vertex (to handle disconnected components)
+    for (int i = 0; i < V; i++) {
+        // If the vertex is not colored, perform BFS to check bipartiteness
+        if (color[i] == -1) {
+            if (checkAndAssignColor(i, V, color, adj) == false) {
+                return false; // Return false if the graph is not bipartite
+            }
+        }
+    }
+
+    return true; // Return true if the graph is bipartite
+}
+
+private boolean checkAndAssignColor(int start, int V, int[] color, List<List<Integer>> adj) {
+    // Queue for BFS traversal
+    Queue<Integer> q = new LinkedList<>();
+    
+    // Start BFS from the given node and assign it a color (0)
+    q.add(start);
+    color[start] = 0;
+
+    while (!q.isEmpty()) {
+        int node = q.peek(); // Get the front node of the queue
+        q.remove(); // Remove it from the queue
+
+        // Traverse all adjacent nodes of the current node
+        for (int i : adj.get(node)) {
+            if (color[i] == -1) { 
+                // If the adjacent node is not colored, assign it an alternate color
+                color[i] = 1 - color[node];
+                q.add(i); // Add it to the queue for further processing
+            } else if (color[i] == color[node]) {
+                // If the adjacent node has the same color as the current node, return false
+                return false;
+            }
+        }
+    }
+    return true; // Return true if no conflict in coloring is found
+}
+
+/*
+Time Complexity:
+- The algorithm performs a BFS traversal of the graph. For each vertex and edge, we process it once.
+- Therefore, the time complexity is O(V + E), where V is the number of vertices and E is the number of edges.
+
+Space Complexity:
+- The space complexity is determined by:
+  1. The `color` array of size O(V) to store colors of vertices.
+  2. The BFS queue which can hold up to O(V) vertices in the worst case.
+- Hence, the total space complexity is O(V).
+*/

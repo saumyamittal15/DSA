@@ -1,0 +1,55 @@
+public boolean isCyclic(int V, List<List<Integer>> adj) {
+    // Array to keep track of visited nodes
+    int vis[] = new int[V];
+    // Array to keep track of nodes in the current path
+    int pathVis[] = new int[V];
+
+    // Traverse all nodes to ensure all components of the graph are checked
+    for (int i = 0; i < V; i++) {
+        // If a node is not visited, start DFS from that node
+        if (vis[i] == 0) {
+            // If a cycle is detected, return true
+            if (dfs(i, adj, vis, pathVis) == true) {
+                return true;
+            }
+        }
+    }
+    // If no cycle is detected in any component, return false
+    return false;
+}
+
+private boolean dfs(int node, List<List<Integer>> adj, int[] vis, int[] pathVis) {
+    // Mark the current node as visited
+    vis[node] = 1;
+    // Mark the current node as part of the current path
+    pathVis[node] = 1;
+
+    // Traverse all adjacent nodes of the current node
+    for (int i : adj.get(node)) {
+        // If the adjacent node is not visited, perform DFS on it
+        if (vis[i] == 0) {
+            if (dfs(i, adj, vis, pathVis) == true) {
+                return true; // Cycle detected
+            }
+        }
+        // If the adjacent node is already in the current path, a cycle exists
+        else if (pathVis[i] == 1) {
+            return true; // Cycle detected
+        }
+    }
+
+    // Backtrack: remove the current node from the current path
+    pathVis[node] = 0;
+    return false; // No cycle detected from this node
+}
+
+/*
+Space Complexity:
+- The space complexity is O(V), where V is the number of vertices.
+- This is due to the use of two arrays `vis` and `pathVis` of size V.
+- Additionally, the recursion stack in DFS can go as deep as O(V) in the worst case.
+
+Time Complexity:
+- The time complexity is O(V + E), where V is the number of vertices and E is the number of edges.
+- Each vertex and edge is visited once during DFS traversal.
+*/
