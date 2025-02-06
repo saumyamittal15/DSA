@@ -1,0 +1,53 @@
+class Solution {
+
+    // Function to determine if a number is a happy number
+    public boolean isHappy(int n) {
+        // Base case: If n is 1 or -1, it is a happy number
+        if (n == 1 || n == -1) {
+            return true;
+        }
+
+        // Set to keep track of numbers we've seen to detect cycles
+        Set<Integer> visit = new HashSet<Integer>();
+
+        // Continue computing the sum of squares until a duplicate value is encountered
+        while (!visit.contains(n)) {
+            visit.add(n); // Add the current number to the set
+            // Compute the sum of squares of digits using helper function
+            n = sumOfSquare(n);
+
+            // If the result becomes 1, it is a happy number
+            if (n == 1) return true;
+        }
+
+        // If we encounter a cycle, return false (not a happy number)
+        return false;
+    }
+
+    // Helper function to compute the sum of squares of digits of a number
+    public int sumOfSquare(int n) {
+        int output = 0;
+
+        // Iterate through each digit in the number
+        while (n != 0) {
+            int digit = n % 10; // Extract the last digit
+            digit = digit * digit; // Square the digit
+            output += digit; // Add the squared digit to the output
+            n = n / 10; // Remove the last digit from the number
+        }
+
+        return output; // Return the computed sum of squares
+    }
+}
+
+/*
+Space Complexity:
+- The space complexity is O(log(n)) in the worst case because we store numbers in a HashSet.
+  The size of each number is proportional to its digits, which is log(n) for an integer `n`.
+
+Time Complexity:
+- The time complexity depends on how many numbers we process before detecting a cycle or reaching 1.
+- For each number, we compute its sum of squares, which takes O(log(n)) time (since there are log(n) digits in `n`).
+- In total, this process will take O(k * log(n)), where `k` is the number of unique numbers encountered before detecting a cycle or reaching 1.
+- Since `k` is bounded by the maximum possible sum of squares for any number (which is relatively small), this can be considered O(log(n)).
+*/

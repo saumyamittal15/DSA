@@ -1,0 +1,63 @@
+class Solution {
+
+    public void setZeroes(int[][] matrix) {
+        // Get the number of rows and columns in the matrix
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        
+        // Boolean variable to track if the first row contains any zeros
+        boolean firstRow = false;
+
+        // First pass: Mark the rows and columns that need to be set to zero
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] == 0) {
+                    // Mark the corresponding column in the first row
+                    matrix[0][j] = 0;
+                    if (i == 0) {
+                        // If it's in the first row, set the flag
+                        firstRow = true;
+                    } else {
+                        // Mark the corresponding row in the first column
+                        matrix[i][0] = 0;
+                    }
+                }
+            }
+        }
+
+        // Second pass: Use markers to set elements to zero, excluding the first row and column
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0) {
+                    // Set cell to zero if its row or column is marked
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        // Handle the first column separately if it was marked
+        if (matrix[0][0] == 0) {
+            for (int i = 0; i < rows; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+
+        // Handle the first row separately if it was marked
+        if (firstRow) {
+            for (int j = 0; j < cols; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+    }
+}
+
+/*
+Space Complexity:
+- The algorithm uses constant extra space (O(1)) because it modifies the input matrix in place without using additional data structures.
+
+Time Complexity:
+- The algorithm involves two passes over the entire matrix.
+    - First pass: O(m * n), where m is the number of rows and n is the number of columns, to identify which rows and columns need to be zeroed.
+    - Second pass: O(m * n) to update the matrix based on markers.
+- Overall time complexity: O(m * n).
+*/

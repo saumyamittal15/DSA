@@ -1,0 +1,41 @@
+class Solution {
+    public double myPow(double x, int n) {
+        // Initialize the result as 1.0
+        double ans = 1.0;
+        
+        // Convert n to a long to handle edge cases like Integer.MIN_VALUE
+        long m = n;
+
+        // If the exponent is negative, take the reciprocal of the base
+        // and make the exponent positive
+        if (m < 0) {
+            x = 1 / x;
+            m = -m;
+        }
+
+        // Perform exponentiation using iterative method
+        while (m > 0) {
+            // If m is odd, multiply the current base (x) with the result (ans)
+            if (m % 2 == 1) {
+                ans *= x;
+                m = m - 1; // Decrease m by 1 to make it even
+            } else {
+                // If m is even, square the base (x) and halve the exponent (m)
+                m = m / 2;
+                x = x * x;
+            }
+        }
+
+        // Return the final result
+        return ans;
+    }
+}
+
+/*
+Space Complexity: O(1)
+- The algorithm uses constant space as it does not require additional data structures or recursion.
+
+Time Complexity: O(log n)
+- The loop runs approximately log(n) times, as the exponent (m) is halved in each iteration.
+- For negative exponents, there is an additional constant-time operation to compute the reciprocal of x.
+*/

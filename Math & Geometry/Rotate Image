@@ -1,0 +1,43 @@
+class Solution {
+    public void rotate(int[][] matrix) {
+        int left = 0; // Initialize the left boundary of the current layer
+        int right = matrix.length - 1; // Initialize the right boundary of the current layer
+        
+        // Loop through layers of the matrix, starting from the outermost layer
+        while (left < right) {
+            for (int i = 0; i < right - left; i++) { // Iterate through elements in the current layer
+                int top = left; // Top boundary of the current layer
+                int bottom = right; // Bottom boundary of the current layer
+                
+                // Save the top-left element temporarily
+                int topLeft = matrix[top][left + i];
+                
+                // Move bottom-left element to top-left
+                matrix[top][left + i] = matrix[bottom - i][left];
+                
+                // Move bottom-right element to bottom-left
+                matrix[bottom - i][left] = matrix[bottom][right - i];
+                
+                // Move top-right element to bottom-right
+                matrix[bottom][right - i] = matrix[top + i][right];
+                
+                // Move saved top-left element to top-right
+                matrix[top + i][right] = topLeft;
+            }
+            
+            // Move to the next inner layer
+            left += 1;
+            right -= 1;
+        }
+    }
+}
+
+/*
+Time Complexity:
+The time complexity is O(n^2), where n is the number of rows (or columns) in the square matrix. 
+This is because we iterate over all elements of the matrix once. Each layer has approximately n elements, 
+and there are about n/2 layers.
+
+Space Complexity:
+The space complexity is O(1) because we are performing the rotation in place without using any additional data structures.
+*/
