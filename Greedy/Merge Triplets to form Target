@@ -1,0 +1,43 @@
+class Solution {
+
+    public boolean mergeTriplets(int[][] triplets, int[] target) {
+        // Create a boolean array to track if each target value (target[0], target[1], target[2]) 
+        // can be satisfied by the triplets
+        boolean[] greedy = new boolean[3];
+
+        // Iterate through each triplet in the input array
+        for (int[] triplet : triplets) {
+            // Check if the current triplet can potentially contribute to forming the target triplet
+            // If any element of the triplet exceeds the corresponding element in the target, skip it
+            boolean isValid = true;
+            for (int i = 0; i < 3; i++) {
+                if (triplet[i] > target[i]) {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (!isValid) continue;
+
+            // Mark the corresponding index in `greedy` as true if the triplet matches the target value
+            for (int i = 0; i < 3; i++) {
+                if (triplet[i] == target[i]) {
+                    greedy[i] = true;
+                }
+            }
+        }
+
+        // Check if all three values in `greedy` are true, meaning we can form the target triplet
+        return greedy[0] && greedy[1] && greedy[2];
+    }
+}
+
+/*
+Time Complexity:
+- Let n be the number of triplets.
+- For each triplet, we perform a constant amount of work (3 comparisons to check validity and 3 updates to `greedy`).
+- Therefore, the overall time complexity is O(n).
+
+Space Complexity:
+- We use a constant amount of extra space for the `greedy` array (size 3).
+- Hence, the space complexity is O(1).
+*/

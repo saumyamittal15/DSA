@@ -1,0 +1,50 @@
+import java.util.*;
+
+public class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        // If the total number of cards is not divisible by the group size, return false
+        if (hand.length % groupSize != 0)
+            return false;
+
+        // Create a map to count the occurrences of each card
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int n : hand)
+            count.put(n, 1 + count.getOrDefault(n, 0));
+
+        // Use a priority queue (min-heap) to process cards in ascending order
+        PriorityQueue<Integer> minH = new PriorityQueue<>(count.keySet());
+        
+        // While there are cards to process
+        while (!minH.isEmpty()) {
+            int first = minH.peek(); // Get the smallest card
+            // Try to form a group starting from 'first' to 'first + groupSize - 1'
+            for (int i = first; i < first + groupSize; i++) {
+                // If the card 'i' is missing, return false
+                if (!count.containsKey(i))
+                    return false;
+                // Decrease the count of card 'i'
+                count.put(i, count.get(i) - 1);
+                // If the count becomes zero, remove it from the heap
+                if (count.get(i) == 0) {
+                    if (i != minH.peek()) // Ensure the heap's top matches the current card
+                        return false;
+                    minH.poll(); // Remove the smallest card from the heap
+                }
+            }
+        }
+        return true; // All cards are successfully grouped
+    }
+}
+
+/*
+Space Complexity:
+- The space complexity is O(N), where N is the number of unique cards in the hand.
+  This is due to storing counts in the HashMap and keys in the priority queue.
+
+Time Complexity:
+- Counting occurrences takes O(N), where N is the size of the input array.
+- Inserting keys into a priority queue takes O(M log M), where M is the number of unique cards.
+- The while loop iterates over each unique card and processes up to `groupSize` cards for each iteration.
+  This results in an overall time complexity of O(M * groupSize * log M).
+- Therefore, the total time complexity is approximately O(N + M * groupSize * log M).
+*/

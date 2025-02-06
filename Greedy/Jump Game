@@ -1,0 +1,27 @@
+class Solution {
+
+    public boolean canJump(int[] nums) {
+        // Initialize the goal to the last index of the array
+        int goal = nums.length - 1;
+
+        // Traverse the array from the second-to-last element to the first
+        for (int i = nums.length - 2; i >= 0; i--) {
+            // Check if the current position can reach or surpass the goal
+            if (nums[i] + i >= goal) {
+                // Update the goal to the current index
+                goal = i;
+            }
+        }
+
+        // If the goal is reduced to 0, it means we can jump to the last index
+        return goal == 0;
+    }
+}
+
+/*
+Time Complexity: O(n)
+- The algorithm iterates through the array once in reverse order, so the time complexity is linear, O(n), where n is the size of the input array.
+
+Space Complexity: O(1)
+- The algorithm uses a constant amount of extra space regardless of the input size, as it only maintains a single variable `goal`.
+*/

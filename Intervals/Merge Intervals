@@ -1,0 +1,47 @@
+class Solution {
+
+    public int[][] merge(int[][] intervals) {
+        // Initialize an ArrayList to store the merged intervals
+        ArrayList<int[]> ans = new ArrayList<>();
+        
+        // Sort the intervals based on the starting times (first element of each interval)
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        
+        // Add the first interval to the answer list as a starting point
+        ans.add(intervals[0]);
+        
+        // Iterate through the rest of the intervals
+        for (int i = 1; i < intervals.length; i++) {
+            // Get the start of the current interval
+            int curStart = intervals[i][0];
+            
+            // Compare the current interval's start with the end of the last interval in 'ans'
+            if (curStart <= ans.get(ans.size() - 1)[1]) {
+                // If overlapping, merge intervals by updating the end time
+                ans.get(ans.size() - 1)[1] =
+                    Math.max(ans.get(ans.size() - 1)[1], intervals[i][1]);
+            } else {
+                // If not overlapping, add the current interval to 'ans'
+                ans.add(intervals[i]);
+            }
+        }
+        
+        // Convert the ArrayList to a 2D array to match return type
+        int[][] res = new int[ans.size()][2];
+        ans.toArray(res);
+        
+        return res;
+    }
+}
+
+/*
+Time Complexity:
+- Sorting the intervals takes O(n log n), where n is the number of intervals.
+- The iteration through all intervals takes O(n).
+- Overall time complexity is O(n log n).
+
+Space Complexity:
+- The space used by the output list 'ans' is O(n) in the worst case (if no intervals overlap).
+- The sorting operation may require additional space depending on the sorting algorithm used.
+- Overall space complexity is O(n).
+*/

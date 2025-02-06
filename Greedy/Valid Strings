@@ -1,0 +1,47 @@
+public class Solution {
+    public boolean checkValidString(String s) {
+        // Initialize two variables to track the minimum and maximum possible open parentheses
+        int leftMin = 0, leftMax = 0;
+
+        // Iterate through each character in the string
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                // If the character is '(', increment both leftMin and leftMax
+                leftMin++;
+                leftMax++;
+            } else if (c == ')') {
+                // If the character is ')', decrement both leftMin and leftMax
+                leftMin--;
+                leftMax--;
+            } else {
+                // If the character is '*', decrement leftMin (treat '*' as ')') 
+                // and increment leftMax (treat '*' as '(')
+                leftMin--;
+                leftMax++;
+            }
+
+            // If at any point, leftMax becomes negative, it means there are too many ')' 
+            // and the string cannot be valid
+            if (leftMax < 0) {
+                return false;
+            }
+
+            // Ensure that leftMin does not go below zero, as we cannot have negative open parentheses
+            if (leftMin < 0) {
+                leftMin = 0;
+            }
+        }
+
+        // If leftMin is zero at the end, it means the string can be valid
+        return leftMin == 0;
+    }
+}
+
+/*
+Space Complexity:
+- The algorithm uses O(1) additional space since it only maintains two integer variables (leftMin and leftMax).
+
+Time Complexity:
+- The algorithm processes each character in the input string exactly once. 
+- Therefore, the time complexity is O(n), where n is the length of the input string.
+*/

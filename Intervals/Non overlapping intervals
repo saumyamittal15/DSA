@@ -1,0 +1,42 @@
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+
+        // Sort intervals based on their end times in ascending order
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));
+        
+        // Initialize the count of intervals to be removed
+        int minIntervals = 0;
+
+        // Keep track of the end time of the last non-overlapping interval
+        int previousEnd = intervals[0][1];
+
+        // Iterate through the intervals starting from the second one
+        for (int i = 1; i < intervals.length; i++) {
+            int currentStart = intervals[i][0]; // Start time of the current interval
+            int currentEnd = intervals[i][1];   // End time of the current interval
+
+            // Check if the current interval overlaps with the previous one
+            if (currentStart < previousEnd) {
+                // Overlap detected, increment the count of intervals to be removed
+                minIntervals++;
+            } else {
+                // No overlap, update the end time of the last non-overlapping interval
+                previousEnd = currentEnd;
+            }
+        }
+
+        // Return the minimum number of intervals to remove to avoid overlaps
+        return minIntervals;
+    }
+}
+
+/*
+Space Complexity:
+- The space complexity is O(1), as we are using only a constant amount of extra space for variables like `minIntervals` and `previousEnd`.
+- The sorting step does not count towards extra space since it modifies the input array in place.
+
+Time Complexity:
+- Sorting the intervals takes O(n log n), where n is the number of intervals.
+- Iterating through the intervals takes O(n).
+- Therefore, the overall time complexity is O(n log n).
+*/

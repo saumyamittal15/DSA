@@ -1,0 +1,52 @@
+/**
+ * Definition of Interval:
+ * public class Interval {
+ *     public int start, end;
+ *     public Interval(int start, int end) {
+ *         this.start = start;
+ *         this.end = end;
+ *     }
+ * }
+ */
+
+public class Solution {
+    /**
+     * Determines if a person can attend all meetings without any overlap.
+     *
+     * @param intervals List of meeting intervals with start and end times.
+     * @return true if no meetings overlap; false otherwise.
+     */
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        // Step 1: Sort the intervals by their start times in ascending order.
+        Collections.sort(intervals, Comparator.comparingInt(i -> i.start));
+
+        // Step 2: Iterate through the sorted intervals to check for overlaps.
+        for (int i = 1; i < intervals.size(); i++) {
+            Interval i1 = intervals.get(i - 1); // Previous interval
+            Interval i2 = intervals.get(i);     // Current interval
+
+            // If the end time of the previous interval is greater than the start time
+            // of the current interval, there is an overlap.
+            if (i1.end > i2.start) {
+                return false; // Cannot attend all meetings due to overlap.
+            }
+        }
+
+        // If no overlaps are found, return true.
+        return true;
+    }
+}
+
+/**
+ * Space and Time Complexity Analysis:
+ *
+ * Time Complexity:
+ * 1. Sorting the intervals takes O(n log n), where n is the number of intervals.
+ * 2. The for loop to check overlaps runs in O(n).
+ * Therefore, the overall time complexity is O(n log n).
+ *
+ * Space Complexity:
+ * 1. The sorting operation may use O(log n) additional space for the sorting algorithm's recursion stack (if Timsort is used).
+ * 2. No additional data structures are used apart from input storage.
+ * Therefore, the space complexity is O(1) additional space (ignoring input storage).
+ */

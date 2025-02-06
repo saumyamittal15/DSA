@@ -1,0 +1,47 @@
+class Solution {
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        // Initialize variables to calculate total gas and cost, 
+        // as well as to track the result and current total balance.
+        int sGas = 0, sCost = 0, res = 0, total = 0;
+        
+        // Calculate the total gas available and total cost required.
+        for (int i = 0; i < gas.length; i++) {
+            sGas += gas[i];
+            sCost += cost[i];
+        }
+        
+        // If the total gas is less than the total cost, 
+        // it's impossible to complete the circuit.
+        if (sGas < sCost) 
+            return -1;
+            
+        // Iterate through each gas station to find the starting point.
+        for (int i = 0; i < gas.length; i++) {
+            // Update the current balance by adding the difference between gas and cost at station i.
+            total += gas[i] - cost[i];
+            
+            // If the current balance becomes negative, reset it and update the starting point.
+            if (total < 0) {
+                total = 0; // Reset total balance
+                res = i + 1; // Move starting point to the next station
+            }
+        }
+        
+        // Return the index of the starting station.
+        return res;
+    }
+}
+
+/*
+Time Complexity:
+- The algorithm iterates through the `gas` and `cost` arrays twice:
+  - First loop calculates the total gas and cost: O(n).
+  - Second loop determines the starting station: O(n).
+- Overall time complexity: O(n).
+
+Space Complexity:
+- The algorithm uses a constant amount of extra space for variables (`sGas`, `sCost`, `res`, `total`).
+- No additional data structures are used.
+- Overall space complexity: O(1).
+*/

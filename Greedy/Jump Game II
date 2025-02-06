@@ -1,0 +1,42 @@
+class Solution {
+
+    public int jump(int[] nums) {
+        // Initialize variables:
+        // res: to count the number of jumps
+        // r: the right boundary of the current jump
+        // l: the left boundary of the current range being explored
+        // fur: to track the farthest position reachable in the next jump
+        int res = 0, r = 0, l = 0, fur = 0;
+
+        // Loop until we reach or exceed the last index
+        while (r < nums.length - 1) {
+            fur = 0; // Reset furthest reachable position for this iteration
+
+            // Iterate through the current range [l, r]
+            for (int i = l; i <= r; i++) {
+                // Update furthest reachable position
+                fur = Math.max(fur, i + nums[i]);
+            }
+
+            // Move to the next range
+            l = r + 1;   // Update left boundary to just after current right boundary
+            r = fur;     // Update right boundary to the farthest reachable position
+            res++;       // Increment jump count
+        }
+
+        return res; // Return the total number of jumps needed
+    }
+}
+
+/*
+Time Complexity:
+- The outer while loop runs at most `n` times, where `n` is the length of `nums`, 
+  because each iteration represents a jump, and in each jump we process a new range.
+- The inner for loop iterates over a range of indices. Over all iterations of 
+  the while loop, each index in `nums` is processed at most once.
+- Therefore, the overall time complexity is O(n).
+
+Space Complexity:
+- The algorithm uses only a constant amount of extra space for variables (res, r, l, fur).
+- Hence, the space complexity is O(1).
+*/

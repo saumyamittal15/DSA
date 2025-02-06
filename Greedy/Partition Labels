@@ -1,0 +1,44 @@
+public class Solution {
+    public List<Integer> partitionLabels(String s) {
+        // Create a map to store the last index of each character in the string
+        Map<Character, Integer> lastIndex = new HashMap<>();
+        
+        // Populate the map with the last occurrence of each character
+        for (int i = 0; i < s.length(); i++) {
+            lastIndex.put(s.charAt(i), i);
+        }
+
+        // Initialize a list to store the sizes of partitions
+        List<Integer> res = new ArrayList<>();
+        
+        // Variables to track the size of the current partition and the farthest index it can reach
+        int size = 0, end = 0;
+        
+        // Iterate through the string to determine partitions
+        for (int i = 0; i < s.length(); i++) {
+            size++; // Increment the size of the current partition
+            end = Math.max(end, lastIndex.get(s.charAt(i))); // Update the farthest index for the current partition
+
+            // If the current index matches the farthest index, finalize this partition
+            if (i == end) {
+                res.add(size); // Add the size of this partition to the result list
+                size = 0; // Reset size for the next partition
+            }
+        }
+
+        return res; // Return the list of partition sizes
+    }
+}
+
+/*
+Space Complexity:
+- The space complexity is O(1) for storing variables like `size` and `end`.
+- The `lastIndex` map requires O(N) space, where N is the number of unique characters in the string.
+- The result list `res` also requires O(K) space, where K is the number of partitions.
+- Overall space complexity: O(N + K).
+
+Time Complexity:
+- Populating the `lastIndex` map takes O(N), where N is the length of the string.
+- The second loop iterates through all characters in the string, taking O(N).
+- Overall time complexity: O(N).
+*/

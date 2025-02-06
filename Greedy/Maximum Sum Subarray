@@ -1,0 +1,41 @@
+class Solution {
+    public int maxSubArray(int[] nums) {
+
+        // Initialize maxSum with the smallest possible integer value
+        // to ensure any subarray sum will be larger initially.
+        int maxSum = Integer.MIN_VALUE;
+
+        // Initialize sum to keep track of the running sum of the current subarray.
+        int sum = 0;
+
+        // Iterate through each number in the array.
+        for (int num : nums) {
+            // Add the current number to the running sum.
+            sum += num;
+
+            // Update maxSum to be the maximum between the current maxSum
+            // and the running sum (sum).
+            maxSum = Math.max(sum, maxSum);
+
+            // If the running sum becomes less than or equal to 0,
+            // reset it to 0. This ensures we start a new subarray
+            // since a negative sum would decrease future subarray sums.
+            if (sum <= 0) {
+                sum = 0;
+            }
+        }
+
+        // Return the maximum subarray sum found.
+        return maxSum;
+    }
+}
+
+/*
+Time Complexity: O(n)
+- The algorithm iterates through the array once, performing constant-time operations for each element. 
+- Therefore, the time complexity is O(n), where n is the length of the input array.
+
+Space Complexity: O(1)
+- The algorithm uses only a fixed amount of extra space (variables `maxSum` and `sum`), regardless of the size of the input array.
+- Thus, the space complexity is O(1).
+*/

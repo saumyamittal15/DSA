@@ -1,0 +1,44 @@
+public class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        // Create a list to store the resulting intervals
+        List<int[]> res = new ArrayList<>();
+        
+        // Iterate through each interval in the input
+        for (int[] interval : intervals) {
+            // Case 1: No overlap, and the current interval ends before the newInterval starts
+            if (newInterval == null || interval[1] < newInterval[0]) {
+                res.add(interval); // Add the current interval to the result
+            } 
+            // Case 2: No overlap, and the current interval starts after the newInterval ends
+            else if (interval[0] > newInterval[1]) {
+                res.add(newInterval); // Add the newInterval to the result
+                res.add(interval);   // Add the current interval to the result
+                newInterval = null;  // Mark newInterval as processed
+            } 
+            // Case 3: Overlapping intervals, merge them
+            else {
+                // Update newInterval to cover the merged range
+                newInterval[0] = Math.min(interval[0], newInterval[0]);
+                newInterval[1] = Math.max(interval[1], newInterval[1]);
+            }
+        }
+        
+        // If newInterval was not added yet, add it at the end
+        if (newInterval != null) res.add(newInterval);
+        
+        // Convert the list to a 2D array and return it
+        return res.toArray(new int[res.size()][]);
+    }
+}
+
+/*
+ * Space Complexity:
+ * - The space complexity is O(n), where n is the number of intervals. This is because we use a list (res)
+ *   to store all intervals, including merged ones.
+ *
+ * Time Complexity:
+ * - The time complexity is O(n), where n is the number of intervals. We iterate through each interval once,
+ *   performing constant-time operations for each.
+ *
+ * Overall, this solution is efficient in both time and space for merging intervals with a single insertion.
+ */
