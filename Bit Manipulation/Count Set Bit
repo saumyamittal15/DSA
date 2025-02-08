@@ -1,0 +1,16 @@
+class Solution {
+    public int hammingWeight(int number) {
+        int setBitCount = 0;
+
+        // Continue until no set bits remain
+        while (number != 0) {
+            // Clear the least significant set bit
+            number &= (number - 1);
+
+            // Increment count
+            setBitCount++;
+        }
+
+        return setBitCount;
+    }
+}

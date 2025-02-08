@@ -1,0 +1,82 @@
+// Memoization Approach
+// Time Complexity: O(n) - Each state (step) is computed once and stored in the dp array.
+// Space Complexity: O(n) - Due to the dp array and recursion stack space.
+class Solution {
+
+    // Array to store intermediate results (memoization)
+    int[] dp;
+
+    public int climbStairs(int n) {
+        // Initialize the dp array with -1 to indicate uncomputed states
+        dp = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = -1;
+        }
+
+        // Start the recursive function from step 0
+        return dfs(n, 0);
+    }
+
+    private int dfs(int n, int i) {
+        // Base case: If we've reached or exceeded the nth step
+        if (i >= n) {
+            return i == n ? 1 : 0; // Return 1 if exactly at nth step, otherwise 0
+        }
+
+        // Check if the result for this step is already computed
+        if (dp[i] != -1) {
+            return dp[i];
+        }
+
+        // Compute and store the result for this step using recursion
+        return dp[i] = dfs(n, i + 1) + dfs(n, i + 2);
+    }
+}
+
+// Tabulation Approach
+// Time Complexity: O(n) - We iterate through the array once.
+// Space Complexity: O(n) - We use an array of size n+1 to store results.
+public class Solution {
+    public int climbStairs(int n) {
+        // Handle base cases where n <= 2
+        if (n <= 2) {
+            return n;
+        }
+
+        // Create a dp array to store the number of ways to reach each step
+        int[] dp = new int[n + 1];
+        
+        // Base cases: 1 way to reach step 1, and 2 ways to reach step 2
+        dp[1] = 1;
+        dp[2] = 2;
+
+        // Fill the dp array iteratively using previous two steps
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        // The result is stored in dp[n], which represents ways to reach nth step
+        return dp[n];
+    }
+}
+
+// Space Optimization Approach
+// Time Complexity: O(n) - We iterate through the steps once.
+// Space Complexity: O(1) - We use only two variables instead of an array.
+public class Solution {
+    public int climbStairs(int n) {
+        // Initialize variables to represent ways to reach last two steps
+        int one = 1, two = 1;
+
+        // Iterate through steps starting from the third step up to nth step
+        for (int i = 0; i < n - 1; i++) {
+            int temp = one;       // Temporarily store current 'one'
+            one = one + two;      // Update 'one' as sum of last two steps
+            two = temp;           // Update 'two' as previous 'one'
+        }
+
+        // The result is stored in 'one', representing ways to reach nth step
+        return one;
+    }
+}
