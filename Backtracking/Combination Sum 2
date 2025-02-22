@@ -32,4 +32,23 @@ class Solution {
      * @param index Current index in the array.
      */
     private void backtrack(int[] candidates, int target, List<Integer> combinationSum, int index) {
-        // Base case: if the targ
+        if(target == 0){
+            result.add(new ArrayList<>(combinationSum));
+            return;
+        }
+
+        if(target < 0 || index >= candidates.length){
+            return;
+        }
+
+        for(int i = index; i < candidates.length; i++){
+            if(i > index && candidates[i] == candidates[i-1]){
+                continue;
+            }
+            combinationSum.add(candidates[i]);
+            backtrack(candidates, target - candidates[i], combinationSum, i + 1);
+            combinationSum.remove(combinationSum.size() - 1);
+        }
+        
+    }
+}
