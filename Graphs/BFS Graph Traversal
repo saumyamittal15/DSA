@@ -16,7 +16,7 @@ class Solution {
 
         // Loop until the queue is empty
         while (!queue.isEmpty()) {
-            // Dequeue a node from the front of the queue
+            // Deque a node from the front of the queue
             Integer node = queue.poll();
             
             // Add the dequeued node to the BFS result
